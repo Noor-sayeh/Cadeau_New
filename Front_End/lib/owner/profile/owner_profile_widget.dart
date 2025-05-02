@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, duplicate_import, unused_field
 
+import 'package:cadeau_project/owner/profile/owner_display_products/product_display_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '/custom/animations.dart';
@@ -175,7 +176,7 @@ String fixImageUrl(String url) {
             buttonSize: 60,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: Colors.white,
               size: 30,
             ),
             onPressed: () async {
@@ -185,7 +186,7 @@ String fixImageUrl(String url) {
           title: Text(
             'Profile',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Inter Tight',
+                  fontFamily: 'Outfit',
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   letterSpacing: 0.0,
                 ),
@@ -232,107 +233,60 @@ String fixImageUrl(String url) {
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(8, 8, 12, 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  if (responsiveVisibility(
-                                    context: context,
-                                    phone: false,
-                                  ))
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 0, 0, 0),
-                                            child: Text(
-                                              ownerData?['name'] ?? 'اسم غير متوفر',
-        style: FlutterFlowTheme.of(context).headlineLarge.override(
-          fontFamily: 'Inter Tight',
-          letterSpacing: 0.0,
-                                                      ),
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(16, 4, 0, 0),
-                                                child: Text(
-                                                  '240 Sales',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodySmall
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                        fontSize: 12,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(4, 2, 0, 0),
-                                                child: Text(
-                                                  'San Antonio, Tx.',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 15, 0, 0),
-                                    child: Container(
-                                      width: 120,
-                                      height: 120,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .accent1,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(
-                          FontAwesomeIcons.userShield,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 40,
-                        ),
-                      ),
-                                    ),
-                                  ),
-                                ],
-                              ).animateOnPageLoad(
-                                  animationsMap['rowOnPageLoadAnimation']!),
+                             child: Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Container(
+      width: 120,
+      height: 120,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).accent1,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: FlutterFlowTheme.of(context).primary,
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(2),
+        child: Icon(
+          FontAwesomeIcons.userShield,
+          color: FlutterFlowTheme.of(context).primary,
+          size: 40,
+        ),
+      ),
+    ),
+    SizedBox(height: 12),
+    Text(
+      ownerData?['name'] ?? 'اسم غير متوفر',
+      style: FlutterFlowTheme.of(context).headlineMedium.override(
+        fontFamily: 'Outfit',
+        color: Colors.black,
+        letterSpacing: 0.0,
+      ),
+    ),
+    SizedBox(height: 4),
+    Text(
+  ownerData?['description'] ?? 'No description available.',
+  style: FlutterFlowTheme.of(context).labelMedium.override(
+    fontFamily: 'Outfit',
+    color: Colors.black54,
+    letterSpacing: 0.0,
+  ),
+  textAlign: TextAlign.center,
+),
+
+  ],
+),
+
                             ),
                             if (responsiveVisibility(
                               context: context,
@@ -344,17 +298,7 @@ String fixImageUrl(String url) {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 0, 0, 0),
-                                    child: Text(
-                                      ownerData?['name'] ?? 'اسم غير متوفر',
-        style: FlutterFlowTheme.of(context).headlineLarge.override(
-          fontFamily: 'Inter Tight',
-          letterSpacing: 0.0,
-        ),
-                                    ),
-                                  ),
+                                  
                                 ],
                               ),
                             Expanded(
@@ -387,12 +331,12 @@ String fixImageUrl(String url) {
         insets: EdgeInsets.symmetric(horizontal: 16),
       ),
       labelStyle: TextStyle(
-        fontFamily: 'Inter',
+        fontFamily: 'Outfit',
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
       unselectedLabelStyle: TextStyle(
-        fontFamily: 'Inter',
+        fontFamily: 'Outfit',
         fontSize: 14,
       ),
       labelPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -411,48 +355,57 @@ String fixImageUrl(String url) {
   padding: EdgeInsets.zero,
   itemCount: _model.ownerProducts.length,
   itemBuilder: (context, index) {
-    final product = _model.ownerProducts[index];
-    return Padding(
+  final product = _model.ownerProducts[index];
+
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProductDisplayWidget(productData: product),
+        ),
+      );
+    },
+    child: Padding(
       padding: EdgeInsetsDirectional.fromSTEB(4, 12, 4, 0),
       child: Container(
         decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).secondaryBackground,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 2,
-              color: Color(0x520E151B),
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
+  color: FlutterFlowTheme.of(context).secondaryBackground,
+  borderRadius: BorderRadius.circular(16),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.05),
+      blurRadius: 12,
+      spreadRadius: 2,
+      offset: Offset(0, 4),
+    ),
+  ],
+),
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
           child: Row(
             children: [
               ClipRRect(
-  borderRadius: BorderRadius.circular(12),
-  child: Image.network(
-    fixImageUrl(
-      product['imageUrls'] != null && product['imageUrls'].isNotEmpty
-          ? product['imageUrls'][0]
-          : 'https://via.placeholder.com/120',
-    ),
-    width: 100,
-    height: 100,
-    fit: BoxFit.cover,
-    errorBuilder: (context, error, stackTrace) {
-      return Image.network(
-        'https://via.placeholder.com/120', // لو صار خطأ بالتحميل
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-      );
-    },
-  ),
-),
-
-
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  fixImageUrl(
+                    product['imageUrls'] != null && product['imageUrls'].isNotEmpty
+                        ? product['imageUrls'][0]
+                        : 'https://via.placeholder.com/120',
+                  ),
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://via.placeholder.com/120',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
               SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -461,6 +414,7 @@ String fixImageUrl(String url) {
                     Text(
                       product['name'] ?? 'No Name',
                       style: FlutterFlowTheme.of(context).titleLarge,
+                      
                     ),
                     SizedBox(height: 8),
                     Text(
@@ -474,8 +428,10 @@ String fixImageUrl(String url) {
           ),
         ),
       ),
-    );
-  },
+    ),
+  );
+},
+
 ),
 
                                           Padding(
@@ -589,7 +545,7 @@ String fixImageUrl(String url) {
                                                                           Text(
                                                                             'UserName',
                                                                             style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                                                                  fontFamily: 'Inter',
+                                                                                  fontFamily: 'Outfit',
                                                                                   letterSpacing: 0.0,
                                                                                 ),
                                                                           ),
@@ -603,7 +559,7 @@ String fixImageUrl(String url) {
                                                                                 Text(
                                                                               'user@domainname.com',
                                                                               style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                    fontFamily: 'Inter',
+                                                                                    fontFamily: 'Outfit',
                                                                                     letterSpacing: 0.0,
                                                                                   ),
                                                                             ),
@@ -636,7 +592,7 @@ String fixImageUrl(String url) {
                                                                               Text(
                                                                             '5',
                                                                             style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                                                                  fontFamily: 'Inter Tight',
+                                                                                  fontFamily: 'Outfit',
                                                                                   letterSpacing: 0.0,
                                                                                 ),
                                                                           ),
@@ -678,7 +634,7 @@ String fixImageUrl(String url) {
                                                                         .labelMedium
                                                                         .override(
                                                                           fontFamily:
-                                                                              'Inter',
+                                                                              'Outfit',
                                                                           letterSpacing:
                                                                               0.0,
                                                                         ),

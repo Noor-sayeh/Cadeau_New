@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, unused_element
+// ignore_for_file: unused_field, unused_import, unused_element, unused_local_variable
 
 import 'package:cadeau_project/custom/icon_button.dart';
 import 'package:cadeau_project/owner/menu/ownermenu_widget.dart';
@@ -43,7 +43,7 @@ File? _selectedImage;
   void initState() {
     super.initState();
     _model = createModel(context, () => AddcategoryModel());
-
+     String? choiceChipsValue;
     _model.keyTextController ??= TextEditingController();
     _model.keyFocusNode ??= FocusNode();
   }
@@ -114,24 +114,60 @@ File? _selectedImage;
     return GestureDetector(
       onTap: _pickImage,
       child: Container(
-        width: 358.5,
-        height: 259.1,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: _selectedImage != null
-            ? Image.file(_selectedImage!, fit: BoxFit.cover)
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.add_a_photo, size: 40),
-                  Text('Upload Category Image'),
-                ],
-              ),
-      ),
+  width: 160,
+  height: 160,
+  decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    color: const Color.fromARGB(255, 177, 158, 203),
+    border: Border.all(color: const Color.fromARGB(255, 129, 7, 194), width: 3),
+    image: _selectedImage != null
+        ? DecorationImage(
+            image: FileImage(_selectedImage!),
+            fit: BoxFit.cover,
+          )
+        : null,
+  ),
+  child: _selectedImage == null
+      ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add_a_photo, size: 40, color: Colors.grey[700]),
+            SizedBox(height: 8),
+            Text('Upload Image', style: TextStyle(fontSize: 12)),
+          ],
+        )
+      : null,
+),
+
     );
   }
+  final List<Map<String, dynamic>> _iconDataList = [
+  {'label': 'Clothing', 'icon': Icons.dry_cleaning_sharp},
+  {'label': 'Luxury gift', 'icon': Icons.monetization_on_rounded},
+  {'label': 'Pet Accessories', 'icon': Icons.pets_outlined},
+  {'label': 'Gardening Kits', 'icon': Icons.forest},
+  {'label': 'Makeup', 'icon': Icons.face_3},
+  {'label': 'Handmade', 'icon': Icons.handshake_rounded},
+  {'label': 'Whatches', 'icon': Icons.watch_sharp},
+  {'label': 'Flowers', 'icon': Icons.spa},
+  {'label': 'Perfumes & Fragrances', 'icon': FontAwesomeIcons.airFreshener},
+  {'label': 'BabyCare', 'icon': FontAwesomeIcons.babyCarriage},
+  {'label': 'Surprise Boxes', 'icon': Icons.card_giftcard},
+  {'label': 'Bags & Wallets', 'icon': FontAwesomeIcons.shoppingBag},
+  {'label': 'Sunglasses', 'icon': FontAwesomeIcons.glasses},
+  {'label': 'Personalized Mugs', 'icon': FontAwesomeIcons.mugHot},
+  {'label': 'Art Supplies', 'icon': Icons.brush},
+  {'label': 'Sports & Fitness', 'icon': FontAwesomeIcons.dumbbell},
+  {'label': 'Board Games', 'icon': FontAwesomeIcons.chess},
+  {'label': 'Jewlery', 'icon': FontAwesomeIcons.sketch},
+  {'label': 'Instruments', 'icon': FontAwesomeIcons.guitar},
+  {'label': 'Chocolate Boxes', 'icon': FontAwesomeIcons.boxOpen},
+  {'label': 'Travel Accessories', 'icon': Icons.airplanemode_active},
+  {'label': 'Phone Accessories', 'icon': Icons.phone_iphone},
+  {'label': 'Car Accessories', 'icon': Icons.directions_car},
+  {'label': 'Other', 'icon': FontAwesomeIcons.modx},
+];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -201,11 +237,15 @@ File? _selectedImage;
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'Outfit',
                                     letterSpacing: 0.0,
                                   ),
                         ),
                       ),
+                      Padding(
+  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+  child: _buildImageWidget(),
+),
                       Container(
                         width: 370,
                         child: TextFormField(
@@ -219,20 +259,20 @@ File? _selectedImage;
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelLarge
                                 .override(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'Outfit',
                                   letterSpacing: 0.0,
                                 ),
                             alignLabelWithHint: true,
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'Outfit',
                                   letterSpacing: 0.0,
                                 ),
                             errorStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  fontFamily: 'Inter',
+                                  fontFamily: 'Outfit',
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 12,
@@ -240,14 +280,14 @@ File? _selectedImage;
                                 ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).alternate,
+                                color: const Color.fromARGB(255, 129, 7, 194),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: const Color.fromARGB(255, 129, 7, 194),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(12),
@@ -274,7 +314,7 @@ File? _selectedImage;
                           ),
                           style:
                               FlutterFlowTheme.of(context).bodyLarge.override(
-                                    fontFamily: 'Inter',
+                                    fontFamily: 'Outfit',
                                     letterSpacing: 0.0,
                                   ),
                           minLines: 1,
@@ -291,126 +331,82 @@ File? _selectedImage;
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 12, 0, 20),
+                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+
                                 child: Text(
                                   'Category icon',
                                   textAlign: TextAlign.start,
                                   style: FlutterFlowTheme.of(context)
                                       .labelMedium
                                       .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                        fontFamily: 'Outfit',
+                                        color: Colors.black,
                                         letterSpacing: 0.0,
                                       ),
                                 ),
                               ),
-                              FlutterFlowChoiceChips(
-                                options: [
-                                  ChipData(
-                                      'Clothing', Icons.dry_cleaning_sharp),
-                                  ChipData('Luxury gift',
-                                      Icons.monetization_on_rounded),
-                                  ChipData(
-                                      'Pet Accessories', Icons.pets_outlined),
-                                  ChipData('Gardening Kits', Icons.forest),
-                                  ChipData('Makeup', Icons.face_3),
-                                  ChipData('Handmade', Icons.handshake_rounded),
-                                  ChipData('Whatches', Icons.watch_sharp),
-                                  ChipData('Flowers', Icons.spa),
-                                  ChipData('Perfumes & Fragrances',
-                                      FontAwesomeIcons.airFreshener),
-                                  ChipData('BabyCare',
-                                      FontAwesomeIcons.babyCarriage),
-                                  ChipData(
-                                      'Surprise Boxes', Icons.card_giftcard),
-                                  ChipData('Bags & Wallets',
-                                      FontAwesomeIcons.shoppingBag),
-                                  ChipData(
-                                      'Sunglasses', FontAwesomeIcons.glasses),
-                                  ChipData('Personalized Mugs',
-                                      FontAwesomeIcons.mugHot),
-                                  ChipData('Art Supplies', Icons.brush),
-                                  ChipData('Sports & Fitness',
-                                      FontAwesomeIcons.dumbbell),
-                                  ChipData(
-                                      'Board Games', FontAwesomeIcons.chess),
-                                  ChipData('Jewlery', FontAwesomeIcons.sketch),
-                                  ChipData(
-                                      'instruments', FontAwesomeIcons.guitar),
-                                  ChipData('Chocolate Boxes',
-                                      FontAwesomeIcons.boxOpen),
-                                  ChipData('Travel Accessories',
-                                      Icons.airplanemode_active),
-                                  ChipData(
-                                      'Phone Accessories', Icons.phone_iphone),
-                                  ChipData(
-                                      'Car Accessories', Icons.directions_car),
-                                  ChipData('Other', FontAwesomeIcons.modx)
-                                ],
-                                onChanged: (val) => safeSetState(() =>
-                                    _model.choiceChipsValue = val?.firstOrNull),
-                                selectedChipStyle: ChipStyle(
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).accent2,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  iconColor:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  iconSize: 18,
-                                  elevation: 0,
-                                  borderColor:
-                                      FlutterFlowTheme.of(context).secondary,
-                                  borderWidth: 2,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                unselectedChipStyle: ChipStyle(
-                                  backgroundColor: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  iconColor: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  iconSize: 18,
-                                  elevation: 0,
-                                  borderColor:
-                                      FlutterFlowTheme.of(context).alternate,
-                                  borderWidth: 2,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                chipSpacing: 8,
-                                rowSpacing: 8,
-                                multiselect: false,
-                                initialized: _model.choiceChipsValue != null,
-                                alignment: WrapAlignment.start,
-                                controller:
-                                    _model.choiceChipsValueController ??=
-                                        FormFieldController<List<String>>(
-                                  ['Tops'],
-                                ),
-                                wrapped: true,
-                              ),
+                             GridView.count(
+  crossAxisCount: 3,
+  shrinkWrap: true,
+  physics: NeverScrollableScrollPhysics(),
+  mainAxisSpacing: 16,
+  crossAxisSpacing: 16,
+  padding: const EdgeInsets.all(8),
+  children: List.generate(_iconDataList.length, (index) {
+    final item = _iconDataList[index];
+    final label = item['label'];
+    final icon = item['icon'];
+    final isSelected = _model.choiceChipsValue == label;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _model.choiceChipsValue = label;
+          print("Selected: $label");
+        });
+      },
+      child: Column(
+        children: [
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey[200],
+              border: isSelected
+                  ? Border.all(color: Color(0xFF998BCF), width: 3)
+                  : null,
+            ),
+            child: Icon(
+              icon,
+              size: 30,
+              color: isSelected ? Color(0xFF998BCF) : Colors.black54,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight:
+                  isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? Color(0xFF998BCF) : Colors.black,
+              fontSize: 12,
+            ),
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
+  }),
+),
+
+
+
                             ],
                           ),
                         ),
                       ),
-                     Padding(
-  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-  child: _buildImageWidget(),
-),
+                     
                     ].divide(SizedBox(height: 23)),
                   ),
                 ),
@@ -422,7 +418,7 @@ File? _selectedImage;
                         padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
                         child: FFButtonWidget(
                           onPressed: _createCategory,
-                          text: 'Create Product',
+                          text: 'Create Category',
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 48,
@@ -434,7 +430,7 @@ File? _selectedImage;
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
-                                  fontFamily: 'Inter Tight',
+                                  fontFamily: 'Outfit',
                                   color: Colors.white,
                                   letterSpacing: 0.0,
                                 ),
@@ -457,4 +453,64 @@ File? _selectedImage;
       ),
     );
   }
+  
+
+Widget _buildGridIcon(String label, IconData icon) {
+  bool isSelected = _model.choiceChipsValue == label;
+
+  return GestureDetector(
+    onTap: () {
+      setState(() {
+        print("Selected: $label");
+        _model.choiceChipsValue = label;
+      });
+    },
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+  shape: BoxShape.circle,
+color: isSelected ? Colors.red : Colors.grey[200],
+
+  border: isSelected
+      ? Border.all(
+          color: Color(0xFF998BCF),
+          width: 3,
+        )
+      : null,
+  boxShadow: isSelected
+      ? [
+          BoxShadow(
+            color: Color(0xFF998BCF).withOpacity(0.3),
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ]
+      : [],
+),
+          padding: EdgeInsets.all(16),
+          child: Icon(
+            icon,
+            size: 28,
+            color: isSelected ? Colors.white : Colors.grey[700],
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: isSelected ? Color(0xFF998BCF) : Colors.black87,
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+
 }

@@ -160,7 +160,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
               Text(
                 'Owner information',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Inter Tight',
+                      fontFamily: 'Outfit',
                       letterSpacing: 0.0,
                     ),
               ),
@@ -227,7 +227,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           color: Colors.black,
                                           letterSpacing: 0.0,
                                         ),
@@ -244,19 +244,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -308,7 +308,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .override(
-                                          fontFamily: 'Inter Tight',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -328,19 +328,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -392,7 +392,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -413,19 +413,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -477,7 +477,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .override(
-                                          fontFamily: 'Inter Tight',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -498,19 +498,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -562,7 +562,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -583,19 +583,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -647,7 +647,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -664,7 +664,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           color: Color(0xFF1D1E1F),
                                           letterSpacing: 0.0,
                                         ),
@@ -683,7 +683,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       textStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
                                             letterSpacing: 0.0,
@@ -704,7 +704,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       textStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryText,
                                             letterSpacing: 0.0,
@@ -742,19 +742,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -806,7 +806,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -829,20 +829,20 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       alignLabelWithHint: true,
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -894,7 +894,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     maxLines: 9,
@@ -917,19 +917,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -981,7 +981,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -1003,19 +1003,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
                                           ),
                                       errorStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            fontFamily: 'Inter',
+                                            fontFamily: 'Outfit',
                                             color: FlutterFlowTheme.of(context)
                                                 .error,
                                             fontSize: 12,
@@ -1067,7 +1067,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyLarge
                                         .override(
-                                          fontFamily: 'Inter',
+                                          fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
                                         ),
                                     cursorColor:
@@ -1107,7 +1107,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                       color: Color(0xFF998BCF),
                       textStyle:
                           FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Inter Tight',
+                                fontFamily: 'Outfit',
                                 color: Colors.white,
                                 letterSpacing: 0.0,
                               ),

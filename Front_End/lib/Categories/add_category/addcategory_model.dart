@@ -13,7 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class AddcategoryModel extends FlutterFlowModel<AddcategoryWidget> {
+class AddcategoryModel extends FlutterFlowModel<AddcategoryWidget> with ChangeNotifier {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for key widget.
@@ -22,10 +22,16 @@ class AddcategoryModel extends FlutterFlowModel<AddcategoryWidget> {
   String? Function(BuildContext, String?)? keyTextControllerValidator;
   // State field(s) for ChoiceChips widget.
   FormFieldController<List<String>>? choiceChipsValueController;
-  String? get choiceChipsValue =>
-      choiceChipsValueController?.value?.firstOrNull;
-  set choiceChipsValue(String? val) =>
-      choiceChipsValueController?.value = val != null ? [val] : [];
+  
+      String? _choiceChipsValue;
+  
+  // Update getter and setter
+  String? get choiceChipsValue => _choiceChipsValue;
+  
+  set choiceChipsValue(String? value) {
+    _choiceChipsValue = value;
+    notifyListeners(); // This will trigger UI update
+  }
   bool isDataUploading = false;
   FFUploadedFile uploadedLocalFile =
       FFUploadedFile(bytes: Uint8List.fromList([]));
