@@ -32,7 +32,7 @@ class EditproductModel extends FlutterFlowModel<EditproductWidget> {
   TextEditingController? maxpriceTextController;
   String? Function(BuildContext, String?)? maxpriceTextControllerValidator;
   // State field(s) for dicount widget.
-  bool? dicountValue;
+  bool? discountValue;
   // State field(s) for diciuntamount widget.
   FocusNode? diciuntamountFocusNode;
   TextEditingController? diciuntamountTextController;
@@ -46,6 +46,8 @@ class EditproductModel extends FlutterFlowModel<EditproductWidget> {
   FocusNode? stockFocusNode;
   TextEditingController? stockTextController;
   String? Function(BuildContext, String?)? stockTextControllerValidator;
+
+  var discountValueController;
 
   @override
   void initState(BuildContext context) {}

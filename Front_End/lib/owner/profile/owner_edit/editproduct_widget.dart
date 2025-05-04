@@ -1,4 +1,9 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unused_field, unused_local_variable
+
+import 'dart:io';
+
+import 'package:cadeau_project/custom/util.dart' as _picker;
+import 'package:image_picker/image_picker.dart';
 
 import '/custom/choice_chips.dart';
 import '/custom/icon_button.dart';
@@ -22,24 +27,31 @@ final Map<String, dynamic> productData; // ✨
   const EditproductWidget({super.key, required this.productData});
   static String routeName = 'editproduct';
   static String routePath = '/editproduct';
-
+  
   @override
   State<EditproductWidget> createState() => _EditproductWidgetState();
 }
 
 class _EditproductWidgetState extends State<EditproductWidget> {
   late EditproductModel _model;
-
+  
   final scaffoldKey = GlobalKey<ScaffoldState>();
+List<String> existingImageUrls = []; // الصور الموجودة في قاعدة البيانات
+Map<int, File?> selectedImages = {};
 
+   // الصور اللي المستخدم رح يختارهم
+ List<String> imageUrls = [];
+  Map<int, File> updatedImages = {};
+  final ImagePicker _picker = ImagePicker();
  @override
 void initState() {
   super.initState();
   _model = createModel(context, () => EditproductModel());
-  _model.dicountValue ??= false;
-
+  _model.discountValue = widget.productData['isOnSale'] ?? false; 
+  existingImageUrls = List<String>.from(widget.productData['imageUrls'] ?? []);
   _model.productNameTextController ??= TextEditingController(text: widget.productData['name'] ?? '');
   _model.productNameFocusNode ??= FocusNode();
+imageUrls = List<String>.from(existingImageUrls);
 
   _model.descriptionTextController ??= TextEditingController(text: widget.productData['description'] ?? '');
   _model.descriptionFocusNode ??= FocusNode();
@@ -73,8 +85,40 @@ void initState() {
     super.dispose();
   }
 
+
+Future<void> pickImage(int index) async {
+  final XFile? picked = await _picker.pickImage(source: ImageSource.gallery);
+  if (picked != null) {
+    setState(() {
+      updatedImages[index] = File(picked.path);
+    });
+  }
+}
+
+Future<String> uploadImageToStorage(File imageFile) async {
+  var request = http.MultipartRequest(
+    'POST',
+    Uri.parse('http://192.168.1.104:5000/api/upload-image'),
+  );
+  request.files.add(
+    await http.MultipartFile.fromPath('image', imageFile.path),
+  );
+  var response = await request.send();
+
+  if (response.statusCode == 200) {
+    var resString = await response.stream.bytesToString();
+    var data = jsonDecode(resString);
+    return data['imageUrl']; // حسب اللي بيرجعه السيرفر
+  } else {
+    throw Exception('Failed to upload image');
+  }
+}
+
+
+
   @override
   Widget build(BuildContext context) {
+    final int imageCount = 3;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -93,7 +137,7 @@ void initState() {
             buttonSize: 60,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: Colors.white,
               size: 30,
             ),
             onPressed: () async {
@@ -105,7 +149,7 @@ void initState() {
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
                   color: FlutterFlowTheme.of(context).secondaryBackground,
-                  fontSize: 25,
+                  fontSize:16,
                   letterSpacing: 0.0,
                 ),
           ),
@@ -118,10 +162,15 @@ void initState() {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
+              
               children: [
+
+
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                  
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.only(bottom: 100),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,6 +191,7 @@ void initState() {
                                   .override(
                                     fontFamily: 'Outfit',
                                     letterSpacing: 0.0,
+                                    color: Colors.black,
                                   ),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
@@ -166,7 +216,7 @@ void initState() {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primary,
+                                  color: Color(0xFF998BCF),
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
@@ -195,6 +245,7 @@ void initState() {
                                 FlutterFlowTheme.of(context).bodyLarge.override(
                                       fontFamily: 'Outfit',
                                       letterSpacing: 0.0,
+                                      color: Colors.black,
                                     ),
                             cursorColor: FlutterFlowTheme.of(context).primary,
                             validator: _model.productNameTextControllerValidator
@@ -203,7 +254,7 @@ void initState() {
                           
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical:4),
                           child: TextFormField(
                             controller: _model.descriptionTextController,
                             focusNode: _model.descriptionFocusNode,
@@ -217,6 +268,7 @@ void initState() {
                                   .override(
                                     fontFamily: 'Outfit',
                                     letterSpacing: 0.0,
+                                    color: Colors.black,
                                   ),
                               alignLabelWithHint: true,
                               hintStyle: FlutterFlowTheme.of(context)
@@ -242,7 +294,7 @@ void initState() {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primary,
+                                  color: Color(0xFF998BCF),
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
@@ -271,6 +323,7 @@ void initState() {
                                 FlutterFlowTheme.of(context).bodyLarge.override(
                                       fontFamily: 'Outfit',
                                       letterSpacing: 0.0,
+                                      color: Colors.black,
                                     ),
                             maxLines: 9,
                             minLines: 4,
@@ -298,6 +351,7 @@ void initState() {
                                           .override(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
+                                            color: Colors.black,
                                           ),
                                     ),
                                     TextFormField(
@@ -343,8 +397,7 @@ void initState() {
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
+                                            color: Color(0xFF998BCF),
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -380,6 +433,7 @@ void initState() {
                                           .override(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
+                                            color: Colors.black,
                                           ),
                                       minLines: 1,
                                       cursorColor:
@@ -395,6 +449,7 @@ void initState() {
                                           .override(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
+                                            color: Colors.black,
                                           ),
                                     ),
                                     TextFormField(
@@ -440,8 +495,7 @@ void initState() {
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
+                                            color: Color(0xFF998BCF),
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -477,6 +531,7 @@ void initState() {
                                           .override(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0.0,
+                                            color: Colors.black,
                                           ),
                                       minLines: 1,
                                       cursorColor:
@@ -505,13 +560,12 @@ void initState() {
                                                         ),
                                                   ),
                                                   Switch.adaptive(
-                                                    value: _model.dicountValue!,
-                                                    onChanged:
-                                                        (newValue) async {
-                                                      safeSetState(() =>
-                                                          _model.dicountValue =
-                                                              newValue);
-                                                    },
+                                                  value: _model.discountValue ?? false,
+  onChanged: (value) {
+    setState(() {
+      _model.discountValue = value;
+    });
+  },
                                                     activeColor: Colors.white, // 🟢 Thumb color when ON
   activeTrackColor: Color(0xFF998BCF), // 🟣 Track color when ON (your theme)
   inactiveThumbColor: Colors.white, // ⚪ Thumb color when OFF
@@ -539,7 +593,7 @@ void initState() {
                                                             .words,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
-                                                      labelText: '25.00 ILS',
+                                                     
                                                       labelStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -590,9 +644,7 @@ void initState() {
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primary,
+                                                          color: Color(0xFF998BCF),
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -655,16 +707,11 @@ void initState() {
                             ].divide(SizedBox(width: 12)),
                           ),
                         ),
-                        
-                      ].divide(SizedBox(height: 10)),
-                    ),
-                  ),
-                ),
-                Container(
+                        Container(
                   height: 100,
                   decoration: BoxDecoration(),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -678,6 +725,7 @@ void initState() {
                                 .override(
                                   fontFamily: 'Outfit',
                                   letterSpacing: 0.0,
+                                  color: Colors.black,
                                 ),
                           ),
                           
@@ -726,8 +774,7 @@ void initState() {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
+                                        color: Color(0xFF998BCF),
                                         width: 2,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
@@ -760,6 +807,7 @@ void initState() {
                                       .override(
                                         fontFamily: 'Outfit',
                                         letterSpacing: 0.0,
+                                        color: Colors.black,
                                       ),
                                   minLines: 1,
                                   cursorColor:
@@ -775,6 +823,11 @@ void initState() {
                     ),
                   ),
                 ),
+                      ].divide(SizedBox(height: 10)),
+                    ),
+                  ),
+                ),
+                
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                   child: Container(
@@ -814,6 +867,10 @@ void initState() {
         _model.stockTextController.text != widget.productData['stock']?.toString()) {
       updates['stock'] = int.tryParse(_model.stockTextController.text) ?? 0;
     }
+    if (_model.discountValue != null &&
+    _model.discountValue != (widget.productData['isOnSale'] ?? false)) {
+  updates['isOnSale'] = _model.discountValue!;
+}
 
     if (updates.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -874,7 +931,9 @@ print('Product ID: ${widget.productData['productId']}');
               ],
             ),
           ),
+          
         ),
+        
       ),
     );
   }

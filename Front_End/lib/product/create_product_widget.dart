@@ -366,13 +366,13 @@ child: selectedImages[0] != null
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add_box, color: FlutterFlowTheme.of(context).primaryText, size: 24),
+            Icon(Icons.add_circle_sharp, color: Color(0xFF998BCF), size: 24),
             SizedBox(height: 8),
             Text(
               'Add first photo',
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                 fontFamily: 'Outfit',
-                color: FlutterFlowTheme.of(context).primaryText,
+                color: Colors.black,
                 letterSpacing: 0.0,
               ),
             ),
@@ -441,13 +441,13 @@ child: selectedImages[1] != null
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add_box, color: FlutterFlowTheme.of(context).primaryText, size: 24),
+            Icon(Icons.add_circle_sharp, color: Color(0xFF998BCF), size: 24),
             SizedBox(height: 8),
             Text(
               'Add the second',
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                 fontFamily: 'Outfit',
-                color: FlutterFlowTheme.of(context).primaryText,
+                color: Colors.black,
                 letterSpacing: 0.0,
               ),
             ),
@@ -518,13 +518,13 @@ child: selectedImages[2] != null
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add_box, color: FlutterFlowTheme.of(context).primaryText, size: 24),
+            Icon(Icons.add_circle_sharp, color: Color(0xFF998BCF), size: 24),
             SizedBox(height: 8),
             Text(
               'Add the third',
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                 fontFamily: 'Outfit',
-                color: FlutterFlowTheme.of(context).primaryText,
+                color: Colors.black,
                 letterSpacing: 0.0,
               ),
             ),
@@ -598,8 +598,7 @@ child: selectedImages[2] != null
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                 color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                                    Color(0xFF998BCF),
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -699,8 +698,7 @@ child: selectedImages[2] != null
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                 color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                                    Color(0xFF998BCF),
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -831,17 +829,14 @@ child: selectedImages[2] != null
                                               _model.choiceChipsValues1 = val),
                                           selectedChipStyle: ChipStyle(
                                             backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .accent2,
+                                                const Color.fromARGB(255, 201, 161, 222),
                                             textStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
                                                     .override(
                                                       fontFamily: 'Outfit',
                                                       color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
+                                                          const Color.fromARGB(255, 255, 255, 255),
                                                       letterSpacing: 0.0,
                                                     ),
                                             iconColor:
@@ -850,8 +845,7 @@ child: selectedImages[2] != null
                                             iconSize: 18,
                                             elevation: 0,
                                             borderColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .secondary,
+                                                const Color.fromARGB(255, 205, 129, 246),
                                             borderWidth: 2,
                                             borderRadius:
                                                 BorderRadius.circular(8),
@@ -921,17 +915,14 @@ child: selectedImages[2] != null
                                           selectedChipStyle: ChipStyle(
                                             
                                             backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .accent2,
+                                                const Color.fromARGB(255, 201, 161, 222),
                                             textStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
                                                     .override(
                                                       fontFamily: 'Outfit',
                                                       color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
+                                                          const Color.fromARGB(255, 255, 255, 255),
                                                       letterSpacing: 0.0,
                                                     ),
                                             iconColor:
@@ -940,8 +931,7 @@ child: selectedImages[2] != null
                                             iconSize: 18,
                                             elevation: 0,
                                             borderColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .secondary,
+                                                const Color.fromARGB(255, 205, 129, 246),
                                             borderWidth: 2,
                                             borderRadius:
                                                 BorderRadius.circular(8),
@@ -1068,9 +1058,7 @@ child: selectedImages[2] != null
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primary,
+                                                          color: Color(0xFF998BCF),
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -1200,9 +1188,7 @@ child: selectedImages[2] != null
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primary,
+                                                          color: Color(0xFF998BCF),
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -1365,9 +1351,7 @@ child: selectedImages[2] != null
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primary,
+                                                          color:Color(0xFF998BCF),
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -1549,8 +1533,7 @@ child: selectedImages[2] != null
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                 color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                                    Color(0xFF998BCF),
                                                 width: 2,
                                               ),
                                               borderRadius:
@@ -1661,8 +1644,7 @@ child: selectedImages[2] != null
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                 color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
+                                                    Color(0xFF998BCF),
                                                 width: 2,
                                               ),
                                               borderRadius:
