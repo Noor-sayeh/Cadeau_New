@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, must_call_super
 
 import '/custom/choice_chips.dart';
 import '/custom/theme.dart';

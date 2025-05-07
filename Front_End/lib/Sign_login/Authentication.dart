@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, duplicate_ignore
 
+import 'package:cadeau_project/Admin/profile/admin_profile_widget.dart';
 import 'package:cadeau_project/Sign_login/Chooseing_Avatar.dart';
 import 'package:cadeau_project/owner/details/owner_details_widget.dart';
 import 'package:cadeau_project/userHomePage/userHomePage.dart';
@@ -197,7 +198,7 @@ Future<void> handleLogin(
       if (userRole == 'admin') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => OwnerDetailsWidget()),
+          MaterialPageRoute(builder: (context) => AdminProfileWidget()),
         );
       }
       else if (userRole == 'Owner' || userRole == 'owner') {

@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import
 
+import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
+
 import '/custom/choice_chips.dart';
 import '/custom/icon_button.dart';
 import '/custom/theme.dart';
@@ -181,12 +183,10 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                   size: 24,
                 ),
                 onPressed: () async {
-                   Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyHomePage(),
-                        ),
-                      );
+                   
+  Navigator.pop(context); // ✅ just go back
+
+
                 },
               ),
             ),

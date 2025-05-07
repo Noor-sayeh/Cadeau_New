@@ -74,27 +74,28 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppBar(
-            backgroundColor: Color(0xFF998BCF),
+           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+
             automaticallyImplyLeading: false,
             title:  Text(
   'Cadeau',
   style: GoogleFonts.dancingScript(
-    color: Colors.white,
-    fontSize: 33,
+    color: const Color(0xFF998BCF),
+    fontSize: 38,
     letterSpacing: 0.0,
     fontWeight: FontWeight.w700,
     shadows: [
       Shadow(
-        blurRadius: 2,
-        color: Colors.black.withOpacity(0.1),
-        offset: Offset(1, 1),
+        blurRadius: 10,
+        color: Colors.black.withOpacity(0.3),
+        offset: Offset(2, 2),
       ),
     ],
   ),
 ),
             actions: [],
             centerTitle: false,
-            elevation: 2,
+            elevation: 0,
           ),
         ),
         body: SafeArea(
@@ -147,7 +148,7 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
                     thickness: 1,
                     indent: 24,
                     endIndent: 24,
-                    color: const Color.fromARGB(255, 129, 7, 194),
+                    color: const Color(0xFF998BCF),
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
@@ -418,7 +419,7 @@ Padding(
           ),
           title: Row(
             children: [
-              Icon(Icons.logout, color: Color(0xFF998BCF)),
+              Icon(Icons.logout, color: const Color(0xFF998BCF)),
               SizedBox(width: 8),
               Text('Log Out'),
             ],
@@ -427,17 +428,22 @@ Padding(
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
+              child: Text('Cancel' ,style: TextStyle(
+      fontFamily: 'Outfit',
+       // أو استخدم GoogleFonts
+    ),),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF998BCF),
+                backgroundColor: const Color(0xFF998BCF),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: () => Navigator.pop(context, true),
-              child: Text('Yes, Log Out'),
+              child: Text('Yes, Log Out',style: TextStyle(
+      fontFamily: 'Outfit', // أو استخدم GoogleFonts
+    ),),
             ),
           ],
         ),
@@ -457,7 +463,7 @@ Padding(
     options: FFButtonOptions(
       width: 150,
       height: 44,
-      color: const Color.fromARGB(255, 161, 131, 217),
+      color: const Color(0xFF998BCF),
       textStyle: TextStyle(
         color: Colors.white,
         fontFamily: 'Outfit',
