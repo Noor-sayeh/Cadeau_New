@@ -206,7 +206,8 @@ exports.addProduct = asyncHandler(async (req, res) => {
 });
 
 exports.deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findOne({ productId: req.params.id });
+
 
   if (!product) {
     return res.status(404).json({
@@ -255,17 +256,18 @@ exports.updateProduct = asyncHandler(async (req, res) => {
       ...req.body,
       lastUpdated: new Date()
     };
-
-    if (req.files && req.files.length) {
-      updates.imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
-    }
+   
+    
 
     // Handle number parsing like you do in addProduct
     if (updates.stock) updates.stock = Number(updates.stock);
     if (updates.price) updates.price = parseFloat(updates.price);
     if (updates.maxPrice) updates.maxPrice = parseFloat(updates.maxPrice);
     if (updates.discountAmount) updates.discountAmount = parseFloat(updates.discountAmount);
-    if (updates.isOnSale) updates.isOnSale = updates.isOnSale === 'true';
+    if ('isOnSale' in updates) {
+      updates.isOnSale = updates.isOnSale === 'true' || updates.isOnSale === true;
+    }
+    
     if (updates.recipientType) updates.recipientType = JSON.parse(updates.recipientType || '[]');
     if (updates.occasion) updates.occasion = JSON.parse(updates.occasion || '[]');
     if (updates.keywords) updates.keywords = JSON.parse(updates.keywords || '[]');
