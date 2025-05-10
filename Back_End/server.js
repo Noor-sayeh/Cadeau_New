@@ -5,6 +5,7 @@ require('dotenv').config();
 const ownerRoutes = require('./routes/ownerRoutes');
 const adminRoutes = require('./routes/adminRoutes'); // ✅ If using admin approve/reject
 const productsRoutes = require('./routes/productsRoutes');
+const msgRoutes = require('./routes/messageRoutes');
 const path = require('path');
 
 const app = express();
@@ -21,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI)
 const categoryRoutes = require('./routes/categories');
 app.use('/api/categories', categoryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/messages', msgRoutes);
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 app.use('/api/owners', ownerRoutes);
