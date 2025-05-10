@@ -61,7 +61,7 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
 
 
 Future<void> updateAdminName(String adminId, String name) async {
-  final url = Uri.parse('http://192.168.1.104:5000/api/admin/$adminId/update');
+  final url = Uri.parse('http://192.168.1.114:5000/api/admin/$adminId/update');
 
   final response = await http.put(
     url,
@@ -76,7 +76,7 @@ Future<void> updateAdminName(String adminId, String name) async {
   }
 }
 Future<String?> fetchAdminName() async {
-  final url = Uri.parse('http://192.168.1.104:5000/api/admin/admin-info');
+  final url = Uri.parse('http://192.168.1.114:5000/api/admin/admin-info');
 
   final response = await http.get(url, headers: {
     'Content-Type': 'application/json',

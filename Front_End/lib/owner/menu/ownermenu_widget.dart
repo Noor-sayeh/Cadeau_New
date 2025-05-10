@@ -2,6 +2,7 @@
 
 import 'package:cadeau_project/Categories/add_category/addcategory_widget.dart';
 import 'package:cadeau_project/Sign_login/Authentication.dart';
+import 'package:cadeau_project/owner/ChatWithAdminWidget.dart';
 import 'package:cadeau_project/owner/profile/owner_profile_widget.dart';
 import 'package:cadeau_project/userHomePage/userHomePage.dart';
 
@@ -42,7 +43,7 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
   }
 
    Future<void> fetchOwnerData() async {
-    final url = 'http://192.168.1.104:5000/api/owners/get/${widget.ownerId}';
+    final url = 'http://192.168.1.114:5000/api/owners/get/${widget.ownerId}';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -380,11 +381,13 @@ Padding(
           ),
           FFButtonWidget(
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                'contactadmin',
-                arguments: {'ownerId': widget.ownerId},
-              );
+              Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => ChatWithAdminWidget(ownerId: widget.ownerId),
+  ),
+);
+
             },
             text: 'Contact Admin',
             options: FFButtonOptions(

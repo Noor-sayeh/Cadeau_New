@@ -75,7 +75,7 @@ class MemberListModel extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      final response = await http.get(Uri.parse('http://192.168.1.104:5000/api/users'));
+      final response = await http.get(Uri.parse('http://192.168.1.114:5000/api/users'));
       if (response.statusCode == 200) {
         final List usersJson = json.decode(response.body);
         _allUsers = usersJson.map((json) => User.fromJson(json)).toList();
@@ -125,7 +125,7 @@ class User {
 }
 
 Future<List<User>> fetchUsers() async {
-  final response = await http.get(Uri.parse('http://192.168.1.104:5000/api/users'));
+  final response = await http.get(Uri.parse('http://192.168.1.114:5000/api/users'));
   if (response.statusCode == 200) {
     final List usersJson = json.decode(response.body);
     return usersJson.map((json) => User.fromJson(json)).toList();
@@ -134,7 +134,7 @@ Future<List<User>> fetchUsers() async {
   }
 }
 Future<void> deleteUser(String id) async {
-  final url = Uri.parse('http://192.168.1.104:5000/api/users/$id');
+  final url = Uri.parse('http://192.168.1.114:5000/api/users/$id');
 
   final response = await http.delete(url);
   if (response.statusCode != 200) {

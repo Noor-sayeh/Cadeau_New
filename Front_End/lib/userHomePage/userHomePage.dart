@@ -96,7 +96,7 @@ class _userHomePageState extends State<userHomePage> {
   Future<void> _fetchUserData() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.104:5000/api/users/${widget.userId}'),
+        Uri.parse('http://192.168.1.114:5000/api/users/${widget.userId}'),
       );
 
       if (response.statusCode == 200) {

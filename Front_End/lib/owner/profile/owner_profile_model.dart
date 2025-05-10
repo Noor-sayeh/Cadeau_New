@@ -24,7 +24,7 @@ class OwnerProfileModel extends FlutterFlowModel<OwnerProfileWidget> with Change
 
   Future<void> fetchOwnerProducts(String ownerId) async {
   try {
-    final url = Uri.parse('http://192.168.1.104:5000/api/owner/$ownerId');
+    final url = Uri.parse('http://192.168.1.114:5000/api/owner/$ownerId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

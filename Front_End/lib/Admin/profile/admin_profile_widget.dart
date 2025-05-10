@@ -1,6 +1,8 @@
 // ignore_for_file: unused_import
 
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
+import 'package:cadeau_project/Admin/messages/adminmessages_widget.dart';
+import 'package:cadeau_project/Admin/profile/announcment/JordanHolidaysWidget.dart';
 import 'package:cadeau_project/Admin/profile/settings/settingseditadmin_widget.dart';
 import 'package:cadeau_project/Sign_login/Authentication.dart';
 import 'package:cadeau_project/Admin/products/AdminAllProductsWidget.dart';
@@ -108,8 +110,15 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                       ),
                 ),
               ),
-              Padding(
+              Padding( ///AdminmessagesWidget
                 padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 32),
+                child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminmessagesWidget()),
+      );
+    },
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -195,6 +204,7 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                     ),
                   ],
                 ),
+                ),
               ),
               Expanded(
                 child: Container(
@@ -248,6 +258,14 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    ///AdminAnnouncementWidget
+                         child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const JordanHolidaysWidget()),
+      );
+    },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -286,6 +304,7 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                                     ),
                                   ],
                                 ),
+                         ),
                               ),
                               Padding(
                                 padding:

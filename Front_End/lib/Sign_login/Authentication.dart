@@ -28,7 +28,7 @@ import 'ownerThings.dart';
 
 class AuthService {
   static const String baseUrl =
-      'http://192.168.1.104:5000/api/users'; // Replace with your actual PC IP
+      'http://192.168.1.114:5000/api/users'; // Replace with your actual PC IP
 
   // Signup function
   Future<Map<String, dynamic>> signUp(
