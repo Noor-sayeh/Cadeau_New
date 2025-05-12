@@ -7,6 +7,7 @@ router.post('/users/signup', userController.createUser);
 router.post('/users/login', userController.loginUser);   // Login
 router.get('/users', userController.getAllUsers);  // Get all users
 router.delete('/users/:id', userController.deleteUser);  // Delete user by ID
+const mongoose = require('mongoose');
 
 ////////////////////////////////// to store avatar /////////////////////////
 // In userRoutes.js - make sure the route is correct
@@ -41,6 +42,7 @@ router.get('/users/:id', async (req, res) => {
       res.status(500).json({ message: 'Error fetching user', error: err.message });
     }
   });
+
 
 
 

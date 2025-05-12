@@ -19,6 +19,11 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 // Import routes
+const fcmRoutes = require('./routes/FCMRouter'); // ← أو حسب اسم الملف عندك
+app.use('/api/fcm', fcmRoutes);
+
+
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 const categoryRoutes = require('./routes/categories');
 app.use('/api/categories', categoryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
