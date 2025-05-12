@@ -43,7 +43,7 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
   }
 
    Future<void> fetchOwnerData() async {
-    final url = 'http://192.168.1.114:5000/api/owners/get/${widget.ownerId}';
+    final url = 'http://192.168.1.127:5000/api/owners/get/${widget.ownerId}';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -60,6 +60,19 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
   }
 
 
+Future<bool> hasUnreadFromAdmin() async {
+  final response = await http.get(
+    Uri.parse('http://192.168.1.127:5000/messages/unread/owner/${widget.ownerId}'),
+  );
+
+  if (response.statusCode == 200) {
+    final List data = json.decode(response.body);
+    return data.any((entry) => entry['_id'] == '68037c897aea2125f35f30a0');
+  } else {
+    print('Failed to fetch unread from admin');
+    return false;
+  }
+}
 
 
   @override
@@ -348,67 +361,116 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
 ),
 Padding(
   padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-  child: Container(
-    width: double.infinity,
-    decoration: BoxDecoration(
-  color: Colors.white,
-  borderRadius: BorderRadius.circular(12),
-  border: Border.all(
-    color: FlutterFlowTheme.of(context).alternate,
-    width: 2,
-  ),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.grey.withOpacity(0.2),
-      spreadRadius: 2,
-      blurRadius: 4,
-      offset: Offset(0, 2),
-    ),
-  ],
-),
-    child: Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(8, 12, 8, 12),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
+  child: FutureBuilder<bool>(
+    future: hasUnreadFromAdmin(),
+    builder: (context, snapshot) {
+      final hasUnread = snapshot.hasData && snapshot.data!;
+     
+      return Stack(
         children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-            child: Icon(
-              Icons.support_agent,
-              color: Colors.black,
-              size: 24,
+          AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: hasUnread ? Color(0xFFD6D0FF) : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: hasUnread
+                    ? const Color.fromARGB(255, 124, 107, 146)
+                    : FlutterFlowTheme.of(context).alternate,
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: hasUnread
+                      ? const Color.fromARGB(255, 124, 107, 146).withOpacity(0.6)
+                      : Colors.grey.withOpacity(0.2),
+                  spreadRadius: 4,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
-          ),
-          FFButtonWidget(
-            onPressed: () {
-              Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => ChatWithAdminWidget(ownerId: widget.ownerId),
-  ),
-);
-
-            },
-            text: 'Contact Admin',
-            options: FFButtonOptions(
-              width: 300,
-              height: 40,
-              padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-              iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-              color: Colors.white,
-              textStyle: FlutterFlowTheme.of(context).titleMedium.override(
-                    fontFamily: 'Outfit',
-                    letterSpacing: 0.0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.support_agent,
+                    color: Colors.black,
+                    size: 24,
                   ),
-              elevation: 0,
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-        ],
+                  SizedBox(width: 8),
+                  Expanded(
+  child: GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: () async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChatWithAdminWidget(ownerId: widget.ownerId),
+        ),
+      );
+      setState(() {});
+    },
+    child: Text(
+      'Contact Admin',
+      style: FlutterFlowTheme.of(context).titleMedium.override(
+        fontFamily: 'Outfit',
+        color: Colors.black,
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
       ),
     ),
   ),
 ),
+
+                ],
+              ),
+            ),
+          ),
+          if (hasUnread)
+            Positioned(
+              top: 6,
+              right: 12,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Color(0xFF7C6B92),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.purple.withOpacity(0.4),
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'Message',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
+    },
+  ),
+),
+
+
+
+
+
+
 Padding(
   padding: EdgeInsets.symmetric(vertical: 16),
   child: FFButtonWidget(

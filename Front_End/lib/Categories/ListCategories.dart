@@ -30,7 +30,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.114:5000/api/categories'),
+        Uri.parse('http://192.168.1.127:5000/api/categories'),
         headers: {'Content-Type': 'application/json'},
       );
 

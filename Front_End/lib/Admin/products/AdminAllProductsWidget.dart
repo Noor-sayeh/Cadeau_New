@@ -27,7 +27,7 @@ class _AdminAllProductsWidgetState extends State<AdminAllProductsWidget> {
 
   Future<void> fetchAllProducts() async {
     try {
-      final url = Uri.parse('http://192.168.1.114:5000/api/all');
+      final url = Uri.parse('http://192.168.1.127:5000/api/all');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -50,7 +50,7 @@ class _AdminAllProductsWidgetState extends State<AdminAllProductsWidget> {
       final ownerId = product['owner_id'];
       if (!ownerNamesCache.containsKey(ownerId)) {
         try {
-          final ownerUrl = Uri.parse('http://192.168.1.114:5000/api/owners/get/$ownerId');
+          final ownerUrl = Uri.parse('http://192.168.1.127:5000/api/owners/get/$ownerId');
           final ownerResponse = await http.get(ownerUrl);
 
           if (ownerResponse.statusCode == 200) {

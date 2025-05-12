@@ -30,7 +30,7 @@ Map<String, dynamic>? ownerData;
 bool isLoadingOwner = true;
   Future<void> fetchMessages() async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.114:5000/messages/admin/${widget.ownerId}'),
+      Uri.parse('http://192.168.1.127:5000/messages/admin/${widget.ownerId}'),
     );
     if (response.statusCode == 200) {
       setState(() {
@@ -39,11 +39,23 @@ bool isLoadingOwner = true;
     } else {
       print('Failed to load messages');
     }
+    await http.post(
+  Uri.parse('http://192.168.1.127:5000/messages/mark-seen'),
+  headers: {'Content-Type': 'application/json'},
+  body: jsonEncode({
+    'senderId': widget.ownerId,
+    'receiverId': '68037c897aea2125f35f30a0',
+  }),
+);
+
   }
+
+
+
 Future<void> fetchOwnerDetails() async {
   try {
     // 1. جهزي الرابط اللي بتطلبي منه بيانات الأونر
-    final url = Uri.parse('http://192.168.1.114:5000/api/owners/get/${widget.ownerId}');
+    final url = Uri.parse('http://192.168.1.127:5000/api/owners/get/${widget.ownerId}');
     
     // 2. أرسلي طلب GET على الرابط
     final response = await http.get(url);
@@ -74,7 +86,7 @@ Future<void> fetchOwnerDetails() async {
     if (content.isEmpty) return;
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.114:5000/messages/send'),
+      Uri.parse('http://192.168.1.127:5000/messages/send'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'senderId': '68037c897aea2125f35f30a0', // Replace with real admin ID
@@ -90,12 +102,31 @@ Future<void> fetchOwnerDetails() async {
       print('Message send failed');
     }
   }
+Future<void> markMessagesAsSeen(String senderId) async {
+  final response = await http.post(
+    Uri.parse('http://192.168.1.127:5000/messages/mark-seen'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({
+      'senderId': senderId, // owner's ID
+      'receiverId': '68037c897aea2125f35f30a0', // static admin ID
+    }),
+  );
 
+  if (response.statusCode != 200) {
+    print('❌ Failed to mark messages as seen');
+  } else {
+    print('✅ Messages marked as seen');
+  }
+}
   @override
   void initState() {
     super.initState();
-    fetchMessages();
+    
      fetchOwnerDetails(); 
+     
+       markMessagesAsSeen(widget.ownerId).then((_) {
+    fetchMessages();
+  });
   }
 
   @override

@@ -16,7 +16,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
   List<dynamic> messages = [];
 
   Future<void> fetchMessages() async {
-    final url = Uri.parse('http://192.168.1.114:5000/messages/admin/${widget.ownerId}');
+    final url = Uri.parse('http://192.168.1.127:5000/messages/admin/${widget.ownerId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -27,13 +27,23 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
       print('❌ Failed to fetch messages');
     }
   }
+Future<void> markMessagesAsSeen({required String senderId, required String receiverId}) async {
+  await http.post(
+    Uri.parse('http://192.168.1.127:5000/messages/mark-seen'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({
+      'senderId': senderId,
+      'receiverId': receiverId,
+    }),
+  );
+}
 
   Future<void> sendMessage() async {
     final content = messageController.text.trim();
     if (content.isEmpty) return;
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.114:5000/messages/send'),
+      Uri.parse('http://192.168.1.127:5000/messages/send'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'senderId': widget.ownerId,   // owner is the sender
@@ -53,7 +63,13 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
   @override
   void initState() {
     super.initState();
-    fetchMessages();
+    
+      markMessagesAsSeen(
+    senderId: '68037c897aea2125f35f30a0', // admin ID
+    receiverId: widget.ownerId,
+  ).then((_) {
+    fetchMessages(); // Load messages only after they're marked seen
+  });
   }
 
   @override

@@ -56,7 +56,7 @@ class _ResetpassWidgetState extends State<ResetpassWidget> {
   required String newPassword,
   required String confirmPassword,
 }) async {
-  final url = Uri.parse('http://192.168.1.114:5000/api/admin/$adminId/reset-password');
+  final url = Uri.parse('http://192.168.1.127:5000/api/admin/$adminId/reset-password');
 
   final response = await http.post(
     url,

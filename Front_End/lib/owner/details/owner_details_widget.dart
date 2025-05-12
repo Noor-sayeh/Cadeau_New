@@ -102,7 +102,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
 
     // 3. Make API call
     final response = await http.post(
-      Uri.parse('http://192.168.1.114:5000/api/owners/add'), // Use your backend IP
+      Uri.parse('http://192.168.1.127:5000/api/owners/add'), // Use your backend IP
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(ownerData),
     );

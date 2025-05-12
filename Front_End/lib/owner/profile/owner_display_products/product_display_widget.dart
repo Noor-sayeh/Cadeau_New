@@ -312,7 +312,7 @@ if (product['keywords'] != null)
             if (confirmDelete == true) {
               try {
                 final response = await http.delete(
-                  Uri.parse('http://192.168.1.114:5000/api/${widget.productData['productId']}'),
+                  Uri.parse('http://192.168.1.127:5000/api/${widget.productData['productId']}'),
                   headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',

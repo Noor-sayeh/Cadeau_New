@@ -53,7 +53,7 @@ bool isLoadingOwner = true;
 Future<void> fetchOwnerDetails() async {
   try {
     // 1. جهزي الرابط اللي بتطلبي منه بيانات الأونر
-    final url = Uri.parse('http://192.168.1.114:5000/api/owners/get/${widget.ownerId}');
+    final url = Uri.parse('http://192.168.1.127:5000/api/owners/get/${widget.ownerId}');
     
     // 2. أرسلي طلب GET على الرابط
     final response = await http.get(url);

@@ -1,11 +1,16 @@
 // ignore_for_file: unused_import
 
+import 'dart:convert';
+
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
 import 'package:cadeau_project/Admin/messages/adminmessages_widget.dart';
+import 'package:cadeau_project/Admin/notifications/AdminNotificationWidget.dart';
 import 'package:cadeau_project/Admin/profile/announcment/JordanHolidaysWidget.dart';
 import 'package:cadeau_project/Admin/profile/settings/settingseditadmin_widget.dart';
 import 'package:cadeau_project/Sign_login/Authentication.dart';
 import 'package:cadeau_project/Admin/products/AdminAllProductsWidget.dart';
+import 'package:cadeau_project/test_icons.dart';
+import 'package:http/http.dart' as http;
 import '/custom/theme.dart';
 import '/custom/util.dart';
 import '/custom/widgets.dart';
@@ -38,6 +43,11 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
     super.initState();
     _model = createModel(context, () => AdminProfileModel());
   }
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  setState(() {}); // This will refetch the unread count each time
+}
 
   @override
   void dispose() {
@@ -45,6 +55,19 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
 
     super.dispose();
   }
+  Future<int> fetchUnreadCount() async {
+  final response = await http.get(
+    Uri.parse('http://192.168.1.127:5000/messages/unread/admin'),
+  );
+
+  if (response.statusCode == 200) {
+    final List data = json.decode(response.body);
+    return data.length; // or sum counts if needed
+  } else {
+    return 0;
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,12 +136,14 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
               Padding( ///AdminmessagesWidget
                 padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 32),
                 child: InkWell(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const AdminmessagesWidget()),
-      );
-    },
+   onTap: () async {
+  await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const AdminmessagesWidget()),
+  );
+  setState(() {}); // 🔁 Triggers UI rebuild, fetches unread count again
+},
+
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -139,11 +164,37 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                                 shape: BoxShape.circle,
                               ),
                               alignment: AlignmentDirectional(0, 0),
-                              child: Icon(
-                                Icons.message_rounded,
-                                color: Colors.black,
-                                size: 24,
-                              ),
+                              child: FutureBuilder<int>(
+  future: fetchUnreadCount(),
+  builder: (context, snapshot) {
+    final hasUnread = snapshot.hasData && snapshot.data! > 0;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(
+          Icons.message_rounded,
+          color: Colors.black,
+          size: 24,
+        ),
+        if (hasUnread)
+          Positioned(
+            right: -1,
+            top: -1,
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+      ],
+    );
+  },
+),
+
                             ),
                           ),
                           Text(
@@ -164,6 +215,14 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
+                 child: InkWell(
+   onTap: () async {
+ Navigator.push(
+  context,
+  MaterialPageRoute(builder: (_) => const AdminNotificationWidget()),
+);
+},
+        
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -200,6 +259,7 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
                             ),
                           ],
                         ),
+                 ),
                       ),
                     ),
                   ],
@@ -493,6 +553,50 @@ child: InkWell(
                                     ),
                                   ],
                                 ),
+                              ),
+                               Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: FaIcon(
+                                        FontAwesomeIcons.award,
+                                        color: const Color(0xFF998BCF),
+                                        size: 24,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text(
+                                          '3D',
+                                          textAlign: TextAlign.start,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 16,
+                                                letterSpacing: 0.0,
+                                                color: Colors.black,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: Colors.black,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+                                    
                               ),
                               Padding(
                                 padding:

@@ -45,23 +45,66 @@ class _AdminmessagesWidgetState extends State<AdminmessagesWidget> {
     super.dispose();
   }
   Future<List<dynamic>> fetchMessages(String ownerId) async {
-  final response = await http.get(Uri.parse('http://192.168.1.114:5000/messages/admin/$ownerId'));
+  final response = await http.get(Uri.parse('http://192.168.1.127:5000/messages/admin/$ownerId'));
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
     throw Exception('Failed to load messages');
   }
 }
+Future<Map<String, dynamic>> fetchOwnersWithUnread() async {
+  try {
+    final ownersResponse = await http.get(
+      Uri.parse('http://192.168.1.127:5000/api/owners/all'),
+    );
+    final unreadResponse = await http.get(
+      Uri.parse('http://192.168.1.127:5000/messages/unread/admin'),
+    );
 
-Future<List<dynamic>> fetchOwners() async {
-  final response = await http.get(Uri.parse('http://192.168.1.114:5000/api/users'));
+    print('📦 Owners status: ${ownersResponse.statusCode}');
+    print('📦 Unread status: ${unreadResponse.statusCode}');
+    print('📦 Unread body: ${unreadResponse.body}');
 
+    if (ownersResponse.statusCode == 200 && unreadResponse.statusCode == 200) {
+      final decodedOwners = json.decode(ownersResponse.body);
+      final List owners = decodedOwners is List
+          ? decodedOwners
+          : decodedOwners['owners'] ?? [];
+
+      final List<Map<String, dynamic>> unread =
+          List<Map<String, dynamic>>.from(json.decode(unreadResponse.body));
+
+      final Map<String, int> unreadCounts = {
+        for (var item in unread) item['_id']: item['count']
+      };
+
+      return {
+        'owners': owners,
+        'unreadCounts': unreadCounts,
+      };
+    } else {
+      throw Exception('❌ Failed to load owners or unread');
+    }
+  } catch (e) {
+    print('❗ Exception in fetchOwnersWithUnread: $e');
+    rethrow;
+  }
+}
+
+
+
+
+Future<Map<String, int>> fetchUnreadCounts() async {
+  final response = await http.get(
+    Uri.parse('http://192.168.1.127:5000/messages/unread/admin'),
+  );
   if (response.statusCode == 200) {
-    final List<dynamic> users = json.decode(response.body);
-    // Filter users with role "Owner"
-    return users.where((user) => user['role'] == 'Owner').toList();
+    final List data = json.decode(response.body);
+    return {
+      for (var entry in data) entry['_id']: entry['count'] as int,
+    };
   } else {
-    throw Exception('Failed to load users');
+    return {};
   }
 }
 
@@ -111,6 +154,7 @@ Future<List<dynamic>> fetchOwners() async {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
+              
               children: [
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(16, 15, 0, 0),
@@ -155,44 +199,57 @@ Future<List<dynamic>> fetchOwners() async {
                                           8, 0, 0, 0),
                                      
 
-child: FutureBuilder<List<dynamic>>(
-  future: fetchOwners(),
+child: FutureBuilder<Map<String, dynamic>>(
+  future: fetchOwnersWithUnread(),
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return Center(child: CircularProgressIndicator());
     } else if (snapshot.hasError) {
-      return Text('Error loading owners');
+      return Text('Error loading data');
     } else {
-      final owners = snapshot.data!;
+      final owners = snapshot.data!['owners'] as List;
+      final unreadCounts = snapshot.data!['unreadCounts'] as Map<String, int>;
+
       return ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(), // Important when inside scroll view
+physics: NeverScrollableScrollPhysics(),
+
         itemCount: owners.length,
         itemBuilder: (context, index) {
           final owner = owners[index];
+          final unread = unreadCounts[owner['_id']];
 
           return ListTile(
-            leading: CircleAvatar(
-              child: Text(owner['name'][0]), // First letter fallback
-            ),
+            leading: CircleAvatar(child: Text(owner['name'][0])),
             title: Text(owner['name']),
             subtitle: Text(owner['email']),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      ChatWithOwnerWidget(ownerId: owner['_id']),
-                ),
-              );
-            },
+            trailing: unread != null
+                ? Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text('$unread', style: TextStyle(color: Colors.white)),
+                  )
+                : Icon(Icons.chevron_right),
+            onTap: () async {
+  await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ChatWithOwnerWidget(ownerId: owner['_id']),
+    ),
+  );
+  setState(() {}); // Re-fetches unread count
+}
+
           );
         },
       );
     }
   },
 ),
+
 
 
                                     ),
