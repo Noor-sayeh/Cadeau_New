@@ -26,7 +26,7 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
 
     setState(() => _isLoading = true);
 
-    final uri = Uri.parse('http://192.168.1.127:5000/api/notifications/send');
+    final uri = Uri.parse('http://192.168.1.107:5000/api/notifications/send');
 
     try {
       final response = await http.post(

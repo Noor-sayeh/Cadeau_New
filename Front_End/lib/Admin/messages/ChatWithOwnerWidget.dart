@@ -30,7 +30,7 @@ Map<String, dynamic>? ownerData;
 bool isLoadingOwner = true;
   Future<void> fetchMessages() async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.127:5000/messages/admin/${widget.ownerId}'),
+      Uri.parse('http://192.168.1.107:5000/messages/admin/${widget.ownerId}'),
     );
     if (response.statusCode == 200) {
       setState(() {
@@ -40,7 +40,7 @@ bool isLoadingOwner = true;
       print('Failed to load messages');
     }
     await http.post(
-  Uri.parse('http://192.168.1.127:5000/messages/mark-seen'),
+  Uri.parse('http://192.168.1.107:5000/messages/mark-seen'),
   headers: {'Content-Type': 'application/json'},
   body: jsonEncode({
     'senderId': widget.ownerId,
@@ -55,7 +55,7 @@ bool isLoadingOwner = true;
 Future<void> fetchOwnerDetails() async {
   try {
     // 1. جهزي الرابط اللي بتطلبي منه بيانات الأونر
-    final url = Uri.parse('http://192.168.1.127:5000/api/owners/get/${widget.ownerId}');
+    final url = Uri.parse('http://192.168.1.107:5000/api/owners/get/${widget.ownerId}');
     
     // 2. أرسلي طلب GET على الرابط
     final response = await http.get(url);
@@ -86,7 +86,7 @@ Future<void> fetchOwnerDetails() async {
     if (content.isEmpty) return;
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.127:5000/messages/send'),
+      Uri.parse('http://192.168.1.107:5000/messages/send'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'senderId': '68037c897aea2125f35f30a0', // Replace with real admin ID
@@ -104,7 +104,7 @@ Future<void> fetchOwnerDetails() async {
   }
 Future<void> markMessagesAsSeen(String senderId) async {
   final response = await http.post(
-    Uri.parse('http://192.168.1.127:5000/messages/mark-seen'),
+    Uri.parse('http://192.168.1.107:5000/messages/mark-seen'),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({
       'senderId': senderId, // owner's ID
@@ -132,107 +132,131 @@ Future<void> markMessagesAsSeen(String senderId) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-  title: Row(
-    children: [
-      CircleAvatar(
-        radius: 16,
-        backgroundColor: Colors.white,
-        child: Icon(Icons.person, color: Color(0xFF6F61EF)),
-      ),
-      SizedBox(width: 12),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            ownerData?['name'] ?? 'اسم غير متوفر', // optionally dynamic
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 16,
+  appBar: AppBar(
+    title: Row(
+      children: [
+        CircleAvatar(
+          radius: 16,
+          backgroundColor: Colors.white,
+          child: Icon(Icons.person, color: Color.fromARGB(255, 124, 107, 146)),
+        ),
+        SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              ownerData?['name'] ?? 'اسم غير متوفر',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
-          ),
-        ],
-      ),
-    ],
+          ],
+        ),
+      ],
+    ),
+    backgroundColor: Color.fromARGB(255, 124, 107, 146), // اللون الأرجواني
+    elevation: 0,
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back, color: Colors.white),
+      onPressed: () => Navigator.pop(context),
+    ),
   ),
-  backgroundColor: Color(0xFF6F61EF),
-  elevation: 0,
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: Colors.white),
-    onPressed: () => Navigator.pop(context),
-  ),
-),
-
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final msg = messages[index];
-                final isAdmin = msg['senderId'] == '68037c897aea2125f35f30a0';
-                return Align(
-  alignment: isAdmin ? Alignment.centerRight : Alignment.centerLeft,
-  child: Container(
-    margin: EdgeInsets.symmetric(vertical: 4),
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  body: Container(
     decoration: BoxDecoration(
-      color: isAdmin ? Color(0xFF6F61EF) : Colors.grey[100],
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(isAdmin ? 16 : 0),
-        topRight: Radius.circular(16),
-        bottomLeft: Radius.circular(16),
-        bottomRight: Radius.circular(isAdmin ? 0 : 16),
+      gradient: LinearGradient(
+        colors: [
+          Colors.white, // اللون الأبيض الطاغي
+          Color.fromARGB(255, 124, 107, 146), // اللون الأرجواني الخفيف
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       ),
     ),
-    child: Text(
-      msg['content'],
-      style: TextStyle(
-        color: isAdmin ? Colors.white : Colors.black87,
-      ),
+    child: Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              final msg = messages[index];
+              final isAdmin = msg['senderId'] == '68037c897aea2125f35f30a0';
+              return Align(
+                alignment: isAdmin ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isAdmin ? Color.fromARGB(255, 124, 107, 146) : Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(isAdmin ? 16 : 0),
+                      topRight: Radius.circular(16),
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(isAdmin ? 0 : 16),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 6,
+                        offset: Offset(0, 4), // تجعل الرسالة تطفو قليلاً
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    msg['content'],
+                    style: TextStyle(
+                      color: isAdmin ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        Divider(height: 1),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 6,
+                        offset: Offset(0, 2), // إضافة ظل خفيف
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type a message..',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              CircleAvatar(
+                backgroundColor: Color.fromARGB(255, 124, 107, 146), // اللون الأرجواني
+                child: IconButton(
+                  icon: Icon(Icons.send, color: Colors.white, size: 20),
+                  onPressed: sendMessage,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     ),
   ),
 );
 
-              },
-            ),
-          ),
-          Divider(height: 1),
-         Padding(
-  padding: EdgeInsets.all(8),
-  child: Row(
-    children: [
-      Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[50],
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: TextField(
-            controller: messageController,
-            decoration: InputDecoration(
-              hintText: 'Type a message...',
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16),
-            ),
-          ),
-        ),
-      ),
-      SizedBox(width: 8),
-      CircleAvatar(
-        backgroundColor: Color(0xFF6F61EF),
-        child: IconButton(
-          icon: Icon(Icons.send, color: Colors.white, size: 20),
-          onPressed: sendMessage,
-        ),
-      ),
-    ],
-  ),
-),
-
-        ],
-      ),
-    );
   }
 }

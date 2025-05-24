@@ -31,7 +31,7 @@ import 'ownerThings.dart';
 
 class AuthService {
   static const String baseUrl =
-      'http://192.168.1.127:5000/api/users'; // Replace with your actual PC IP
+      'http://192.168.1.107:5000/api/users'; // Replace with your actual PC IP
 
   // Signup function
   Future<Map<String, dynamic>> signUp(
@@ -162,24 +162,6 @@ Future<Map<String, dynamic>?> handleSignup(
     return null;
   }
 }
-Future<void> sendFcmTokenToBackend(String userId) async {
- 
-  final token = await FirebaseMessaging.instance.getToken();
-  print('✅ FCM Token: $token');
-
-  if (token != null) {
-    final response = await http.post(
-      Uri.parse('http://192.168.1.127:5000/api/fcm/store-token'), // 🔥 لاحظ المسار الجديد
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'userId': userId,
-        'fcmToken': token,
-      }),
-    );
-
-    print('✅ Backend response: ${response.statusCode}');
-  }
-}
 
 
 
@@ -219,20 +201,9 @@ Future<void> handleLogin(
       final userId = response['user']['_id'] ?? ''; // Get user ID from response
       
        final ownerId = response['user']['_id'];
-   String? fcmToken = await FirebaseMessaging.instance.getToken();
 
-      // ✅ Send FCM token to backend
-      if (fcmToken != null && userId.isNotEmpty) {
-        await http.post(
-          Uri.parse('http://192.168.1.127:5000/api/update-token'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'userId': userId,
-            'fcmToken': fcmToken,
-          }),
-        );
-      }
-await sendFcmTokenToBackend(userId);
+
+
       if (userRole == 'admin') {
         Navigator.pushReplacement(
           context,

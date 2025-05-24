@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:cadeau_project/Admin/cup_webview.dart';
+import 'package:cadeau_project/Admin/giftbox_webview.dart';
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
 import 'package:cadeau_project/Admin/messages/adminmessages_widget.dart';
 import 'package:cadeau_project/Admin/notifications/AdminNotificationWidget.dart';
@@ -57,7 +59,7 @@ void didChangeDependencies() {
   }
   Future<int> fetchUnreadCount() async {
   final response = await http.get(
-    Uri.parse('http://192.168.1.127:5000/messages/unread/admin'),
+    Uri.parse('http://192.168.1.107:5000/messages/unread/admin'),
   );
 
   if (response.statusCode == 200) {
@@ -219,7 +221,7 @@ void didChangeDependencies() {
    onTap: () async {
  Navigator.push(
   context,
-  MaterialPageRoute(builder: (_) => const AdminNotificationWidget()),
+  MaterialPageRoute(builder: (_) =>  CupWebView()),
 );
 },
         
@@ -315,7 +317,7 @@ void didChangeDependencies() {
                                       ),
                                 ),
                               ),
-                              Padding(
+                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                     ///AdminAnnouncementWidget
@@ -323,7 +325,7 @@ void didChangeDependencies() {
     onTap: () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const JordanHolidaysWidget()),
+        MaterialPageRoute(builder: (_) => const AdminNotificationWidget()),
       );
     },
                                 child: Row(
@@ -345,6 +347,57 @@ void didChangeDependencies() {
                                             0, 0, 12, 0),
                                         child: Text(
                                           'Announcements',
+                                          textAlign: TextAlign.start,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 16,
+                                                letterSpacing: 0.0,
+                                                color: Colors.black,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: Colors.black,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+                         ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    ///AdminAnnouncementWidget
+                         child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const JordanHolidaysWidget()),
+      );
+    },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: Icon(
+                                        Icons.event,
+                                        color: const Color(0xFF998BCF),
+                                        size: 24,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text(
+                                          'Occasions',
                                           textAlign: TextAlign.start,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
@@ -554,50 +607,7 @@ child: InkWell(
                                   ],
                                 ),
                               ),
-                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                                    
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 16, 8),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.award,
-                                        color: const Color(0xFF998BCF),
-                                        size: 24,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 12, 0),
-                                        child: Text(
-                                          '3D',
-                                          textAlign: TextAlign.start,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Outfit',
-                                                fontSize: 16,
-                                                letterSpacing: 0.0,
-                                                color: Colors.black,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right_rounded,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ],
-                                ),
-                                    
-                              ),
+                          
                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),

@@ -98,7 +98,7 @@ Future<void> pickImage(int index) async {
 Future<String> uploadImageToStorage(File imageFile) async {
   var request = http.MultipartRequest(
     'POST',
-    Uri.parse('http://192.168.1.127:5000/api/upload-image'),
+    Uri.parse('http://192.168.1.107:5000/api/upload-image'),
   );
   request.files.add(
     await http.MultipartFile.fromPath('image', imageFile.path),
@@ -881,7 +881,7 @@ Future<String> uploadImageToStorage(File imageFile) async {
 
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.127:5000/api/${widget.productData['_id']}'), // ✅ الرابط الصحيح مع الـ ID
+        Uri.parse('http://192.168.1.107:5000/api/${widget.productData['_id']}'), // ✅ الرابط الصحيح مع الـ ID
         headers: {
           'Content-Type': 'application/json',
         },
