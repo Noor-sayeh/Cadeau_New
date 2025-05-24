@@ -7,7 +7,7 @@ const adminRoutes = require('./routes/adminRoutes'); // ✅ If using admin appro
 const productsRoutes = require('./routes/productsRoutes');
 const msgRoutes = require('./routes/messageRoutes');
 const path = require('path');
-
+const boxRoutes = require('./routes/boxRoutes');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -22,7 +22,10 @@ mongoose.connect(process.env.MONGO_URI)
 const fcmRoutes = require('./routes/FCMRouter'); // ← أو حسب اسم الملف عندك
 app.use('/api/fcm', fcmRoutes);
 
+const cupRoutes = require('./routes/cupRoutes');
+app.use("/api/cups", cupRoutes);
 
+app.use('/api/box', boxRoutes);
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 const categoryRoutes = require('./routes/categories');
 app.use('/api/categories', categoryRoutes);
