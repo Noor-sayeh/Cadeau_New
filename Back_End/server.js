@@ -31,6 +31,16 @@ const categoryRoutes = require('./routes/categories');
 app.use('/api/categories', categoryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/messages', msgRoutes);
+
+
+const orderRoutes = require('./routes/orderRoutes');
+app.use('/api/orders', orderRoutes);
+
+const reviewRoutes = require('./routes/ReviewRoutes');
+
+// app.use(express.json());
+app.use('/api/reviews', reviewRoutes);
+
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 app.use('/api/owners', ownerRoutes);

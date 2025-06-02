@@ -2,8 +2,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Review = require('../models/Review');
 require('dotenv').config();
-
+const Order = require('../models/Orders');
 exports.approveOwner = async (req, res) => {
   try {
     const { id } = req.params;
@@ -37,6 +38,42 @@ exports.getAdminInfo = async (req, res) => {
   }
 };
 
+
+exports.getAdminStats = async (req, res) => {
+  try {
+    const totalOrders = await Order.countDocuments();
+    const totalUsers = await User.countDocuments({
+      role: { $in: ['Customer', 'customer'] }
+    });
+
+    const totalOwners = await User.countDocuments({
+      role: { $in: ['Owner', 'owner'] }
+    });
+
+    const revenueResult = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: { $ifNull: ['$totalAmount', 0] } }
+        }
+      }
+    ]);
+
+    const totalRevenue = revenueResult[0]?.total ?? 0;
+
+    res.json({
+      users: totalUsers,
+      owners: totalOwners,
+      totalRevenue: totalRevenue.toFixed(2),
+        orders: totalOrders,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch stats', error: err });
+  }
+};
+
+
+
 exports.resetAdminPassword = async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
@@ -65,6 +102,44 @@ exports.resetAdminPassword = async (req, res) => {
   }
 };
 
+// Get all reviews (admin use with product owner name)
+exports.getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .populate('user', 'name avatar') // معلومات المستخدم
+      .populate({
+        path: 'product',
+        select: 'name owner_id',
+        populate: {
+          path: 'owner_id',
+          select: 'name' // اسم صاحب المنتج فقط
+        }
+      })
+      .sort({ createdAt: -1 });
+
+    const formatted = reviews.map((r) => ({
+      _id: r._id,
+      rating: r.rating,
+      comment: r.comment,
+      createdAt: r.createdAt,
+      userName: r.user.name,
+      userAvatar: r.user.avatar,
+      productName: r.product?.name || '',
+      productOwnerName: r.product?.owner_id?.name || '',
+    }));
+
+    res.json({
+      success: true,
+      count: formatted.length,
+      data: formatted,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch reviews: ' + err.message
+    });
+  }
+};
 
 
 exports.updateAdminInfo = async (req, res) => {
