@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show get, post;
 
 import '/custom/icon_button.dart';
@@ -30,7 +31,7 @@ Map<String, dynamic>? ownerData;
 bool isLoadingOwner = true;
   Future<void> fetchMessages() async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.107:5000/messages/admin/${widget.ownerId}'),
+      Uri.parse('${dotenv.env['BASE_URL']}/messages/admin/${widget.ownerId}'),
     );
     if (response.statusCode == 200) {
       setState(() {
@@ -40,7 +41,7 @@ bool isLoadingOwner = true;
       print('Failed to load messages');
     }
     await http.post(
-  Uri.parse('http://192.168.1.107:5000/messages/mark-seen'),
+  Uri.parse('${dotenv.env['BASE_URL']}/messages/mark-seen'),
   headers: {'Content-Type': 'application/json'},
   body: jsonEncode({
     'senderId': widget.ownerId,
@@ -55,7 +56,7 @@ bool isLoadingOwner = true;
 Future<void> fetchOwnerDetails() async {
   try {
     // 1. جهزي الرابط اللي بتطلبي منه بيانات الأونر
-    final url = Uri.parse('http://192.168.1.107:5000/api/owners/get/${widget.ownerId}');
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/owners/get/${widget.ownerId}');
     
     // 2. أرسلي طلب GET على الرابط
     final response = await http.get(url);
@@ -86,7 +87,7 @@ Future<void> fetchOwnerDetails() async {
     if (content.isEmpty) return;
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.107:5000/messages/send'),
+      Uri.parse('${dotenv.env['BASE_URL']}/messages/send'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'senderId': '68037c897aea2125f35f30a0', // Replace with real admin ID
@@ -104,7 +105,7 @@ Future<void> fetchOwnerDetails() async {
   }
 Future<void> markMessagesAsSeen(String senderId) async {
   final response = await http.post(
-    Uri.parse('http://192.168.1.107:5000/messages/mark-seen'),
+    Uri.parse('${dotenv.env['BASE_URL']}/messages/mark-seen'),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({
       'senderId': senderId, // owner's ID

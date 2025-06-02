@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cadeau_project/custom/util.dart' as _picker;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '/custom/choice_chips.dart';
@@ -57,7 +58,8 @@ imageUrls = List<String>.from(existingImageUrls);
   _model.descriptionFocusNode ??= FocusNode();
 
   _model.minpriceTextController ??= TextEditingController(
-    text: widget.productData['priceRange']?.toString() ?? widget.productData['price']?.toString() ?? ''
+    text: widget.productData['priceRange']?['min']?.toString() ?? ''
+
   );
   _model.minpriceFocusNode ??= FocusNode();
 
@@ -98,7 +100,7 @@ Future<void> pickImage(int index) async {
 Future<String> uploadImageToStorage(File imageFile) async {
   var request = http.MultipartRequest(
     'POST',
-    Uri.parse('http://192.168.1.107:5000/api/upload-image'),
+    Uri.parse('${dotenv.env['BASE_URL']}/api/upload-image'),
   );
   request.files.add(
     await http.MultipartFile.fromPath('image', imageFile.path),
@@ -126,37 +128,8 @@ Future<String> uploadImageToStorage(File imageFile) async {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        appBar: AppBar(
-          backgroundColor: Color(0xFF998BCF),
-          automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30,
-            borderWidth: 1,
-            buttonSize: 60,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(
-            'Edit Product',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  fontSize:16,
-                  letterSpacing: 0.0,
-                ),
-          ),
-          actions: [],
-          centerTitle: false,
-          elevation: 0,
-        ),
+        backgroundColor: Colors.white,
+        
         body: SafeArea(
           top: true,
           child: SingleChildScrollView(
@@ -164,7 +137,27 @@ Future<String> uploadImageToStorage(File imageFile) async {
               mainAxisSize: MainAxisSize.max,
               
               children: [
-
+Padding(
+  padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+  child: Row(
+    children: [
+      GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: Icon(Icons.arrow_back, color: Colors.black, size: 26),
+      ),
+      const SizedBox(width: 12),
+      Text(
+        'Edit Product', // or 'Details', 'Edit Product'
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    ],
+  ),
+),
+Divider(height: 24, thickness: 1),
 
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
@@ -881,7 +874,7 @@ Future<String> uploadImageToStorage(File imageFile) async {
 
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.107:5000/api/${widget.productData['_id']}'), // ✅ الرابط الصحيح مع الـ ID
+        Uri.parse('${dotenv.env['BASE_URL']}/api/${widget.productData['_id']}'), // ✅ الرابط الصحيح مع الـ ID
         headers: {
           'Content-Type': 'application/json',
         },

@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import, must_call_super
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '/custom/animations.dart';
 
 import '/custom/icon_button.dart';
@@ -24,7 +26,7 @@ class OwnerProfileModel extends FlutterFlowModel<OwnerProfileWidget> with Change
 
   Future<void> fetchOwnerProducts(String ownerId) async {
   try {
-    final url = Uri.parse('http://192.168.1.107:5000/api/owner/$ownerId');
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/owner/$ownerId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

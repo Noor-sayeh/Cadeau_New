@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, unused_local_variable
 
 import 'package:cadeau_project/owner/profile/owner_edit/editproduct_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '/custom/choice_chips.dart';
 import '/custom/icon_button.dart';
@@ -49,6 +50,14 @@ class _ProductDisplayWidgetState extends State<ProductDisplayWidget> {
 
     super.dispose();
   }
+  String fixImageUrl(String url) {
+  final baseUrl = dotenv.env['BASE_URL'] ?? '';
+  if (url.contains('/uploads/')) {
+    final parts = url.split('/uploads/');
+    return '$baseUrl/uploads/${parts.last}';
+  }
+  return url;
+}
 
  @override
 Widget build(BuildContext context) {
@@ -57,34 +66,36 @@ Widget build(BuildContext context) {
   return Scaffold(
     key: scaffoldKey,
     backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-    appBar: AppBar(
-      backgroundColor: Color(0xFF998BCF),
-      automaticallyImplyLeading: false,
-      leading: FlutterFlowIconButton(
-        borderColor: Colors.transparent,
-        borderRadius: 30,
-        borderWidth: 1,
-        buttonSize: 60,
-        icon: Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.white,
-          size: 30,
-        ),
-        onPressed: () async {
-          Navigator.pop(context);
-        },
-      ),
-      title: Text(
-        'Details',
-        style: FlutterFlowTheme.of(context).headlineMedium.override(
-              fontFamily: 'Outfit',
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-              letterSpacing: 0.0,
+    appBar: PreferredSize(
+  preferredSize: Size.fromHeight(70),
+  child: SafeArea(
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              padding: EdgeInsets.all(8),
+              
+              child: Icon(Icons.arrow_back, color: Colors.black87, size: 24),
             ),
+          ),
+          SizedBox(width: 16),
+          Text(
+            'Details',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
-      centerTitle: false,
-      elevation: 0,
     ),
+  ),
+),
+
     body: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,8 +130,9 @@ Widget build(BuildContext context) {
               itemCount: product['imageUrls']?.length ?? 1,
               itemBuilder: (context, index) {
                 final imageUrl = (product['imageUrls'] != null && product['imageUrls'].isNotEmpty)
-                    ? product['imageUrls'][index]
+                    ? fixImageUrl(product['imageUrls'][index])
                     : 'https://via.placeholder.com/120';
+
                 return CachedNetworkImage(
                   imageUrl: imageUrl,
                   fit: BoxFit.cover,
@@ -312,7 +324,7 @@ if (product['keywords'] != null)
             if (confirmDelete == true) {
               try {
                 final response = await http.delete(
-                  Uri.parse('http://192.168.1.107:5000/api/${widget.productData['productId']}'),
+                  Uri.parse('${dotenv.env['BASE_URL']}/api/${widget.productData['productId']}'),
                   headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',

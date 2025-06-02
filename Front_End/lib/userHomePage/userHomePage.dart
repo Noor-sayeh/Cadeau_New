@@ -1,6 +1,7 @@
 import 'package:avatar_plus/avatar_plus.dart';
 import 'package:cadeau_project/avatar_chat_page/avatar_chat_page.dart';
 import 'package:cadeau_project/userHomePage/userHomePage_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '/custom/icon_button.dart';
 import '/custom/theme.dart';
 import '/custom/util.dart';
@@ -96,7 +97,7 @@ class _userHomePageState extends State<userHomePage> {
   Future<void> _fetchUserData() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.107:5000/api/users/${widget.userId}'),
+        Uri.parse('${dotenv.env['BASE_URL']}/api/users/${widget.userId}'),
       );
 
       if (response.statusCode == 200) {

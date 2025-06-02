@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cadeau_project/Admin/SalesChartPage.dart';
 import 'package:cadeau_project/Admin/cup_webview.dart';
 import 'package:cadeau_project/Admin/giftbox_webview.dart';
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
@@ -9,9 +10,11 @@ import 'package:cadeau_project/Admin/messages/adminmessages_widget.dart';
 import 'package:cadeau_project/Admin/notifications/AdminNotificationWidget.dart';
 import 'package:cadeau_project/Admin/profile/announcment/JordanHolidaysWidget.dart';
 import 'package:cadeau_project/Admin/profile/settings/settingseditadmin_widget.dart';
+import 'package:cadeau_project/Admin/reviews.dart';
 import 'package:cadeau_project/Sign_login/Authentication.dart';
 import 'package:cadeau_project/Admin/products/AdminAllProductsWidget.dart';
 import 'package:cadeau_project/test_icons.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '/custom/theme.dart';
 import '/custom/util.dart';
@@ -59,7 +62,7 @@ void didChangeDependencies() {
   }
   Future<int> fetchUnreadCount() async {
   final response = await http.get(
-    Uri.parse('http://192.168.1.107:5000/messages/unread/admin'),
+    Uri.parse('${dotenv.env['BASE_URL']}/messages/unread/admin'),
   );
 
   if (response.statusCode == 200) {
@@ -221,7 +224,7 @@ void didChangeDependencies() {
    onTap: () async {
  Navigator.push(
   context,
-  MaterialPageRoute(builder: (_) =>  CupWebView()),
+  MaterialPageRoute(builder: (_) =>  GiftBoxWebView()),
 );
 },
         
@@ -526,6 +529,13 @@ child: InkWell(
                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardWidget()),
+      );
+    },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -564,10 +574,20 @@ child: InkWell(
                                     ),
                                   ],
                                 ),
+                                    ),
                               ),
                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    ///AdminAllReviewsWidget
+                                    ///
+              child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminAllReviewsWidget()),
+      );
+    },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -606,6 +626,7 @@ child: InkWell(
                                     ),
                                   ],
                                 ),
+              ),
                               ),
                           
                               Padding(

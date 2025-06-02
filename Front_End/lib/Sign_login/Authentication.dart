@@ -8,7 +8,6 @@ import 'package:cadeau_project/owner/menu/ownermenu_widget.dart';
 import '/custom/theme.dart';
 import '/custom/util.dart';
 import '/custom/widgets.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +30,7 @@ import 'ownerThings.dart';
 
 class AuthService {
   static const String baseUrl =
-      'http://192.168.1.107:5000/api/users'; // Replace with your actual PC IP
+      'http://192.168.1.106:5000/api/users'; // Replace with your actual PC IP
 
   // Signup function
   Future<Map<String, dynamic>> signUp(

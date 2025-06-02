@@ -6,14 +6,17 @@ import 'package:cadeau_project/owner/details/owner_details_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 export 'welcome_page_model.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Sign_login/Authentication.dart';
 export 'Sign_login/Authentication.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+ 
+
+  await dotenv.load(fileName: ".env");
+   print("🌍 BASE_URL: ${dotenv.env['BASE_URL']}");
   runApp(MyApp());
 }
 

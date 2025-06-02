@@ -1,8 +1,11 @@
 // admin_all_products_widget.dart
 // This page displays all products for the admin with owner name displayed on each card
 
+// ignore_for_file: unused_element
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '/custom/theme.dart';
 import 'package:cadeau_project/owner/profile/owner_display_products/product_display_widget.dart';
@@ -24,10 +27,44 @@ class _AdminAllProductsWidgetState extends State<AdminAllProductsWidget> {
     super.initState();
     fetchAllProducts();
   }
+Widget _buildSummarySection() {
+  final productCount = allProducts.length;
+  final ownerCount = ownerNamesCache.keys.length;
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      _dashboardCard(Icons.inventory_2, 'Products', productCount.toString()),
+      _dashboardCard(Icons.person, 'Owners', ownerCount.toString()),
+    ],
+  );
+}
+
+Widget _dashboardCard(IconData icon, String title, String value) {
+  return Container(
+    width: 150,
+    height: 90,
+    padding: EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: Color(0xFF6F61EF)),
+        SizedBox(height: 8),
+        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(value, style: TextStyle(fontSize: 16)),
+      ],
+    ),
+  );
+}
 
   Future<void> fetchAllProducts() async {
     try {
-      final url = Uri.parse('http://192.168.1.107:5000/api/all');
+      final url = Uri.parse('${dotenv.env['BASE_URL']}/api/all');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -50,7 +87,7 @@ class _AdminAllProductsWidgetState extends State<AdminAllProductsWidget> {
       final ownerId = product['owner_id'];
       if (!ownerNamesCache.containsKey(ownerId)) {
         try {
-          final ownerUrl = Uri.parse('http://192.168.1.107:5000/api/owners/get/$ownerId');
+          final ownerUrl = Uri.parse('${dotenv.env['BASE_URL']}/api/owners/get/$ownerId');
           final ownerResponse = await http.get(ownerUrl);
 
           if (ownerResponse.statusCode == 200) {
@@ -67,38 +104,60 @@ class _AdminAllProductsWidgetState extends State<AdminAllProductsWidget> {
   }
 
   String fixImageUrl(String url) {
-    if (url.startsWith('http://localhost')) {
-      return url.replaceFirst('http://localhost', 'http://192.168.1.104');
-    }
-    if (url.contains('example.com')) {
-      return 'https://via.placeholder.com/120';
-    }
-    return url;
+  final baseUrl = dotenv.env['BASE_URL'] ?? '';
+
+  // استخراج /uploads/filename فقط من أي URL فيه IP
+  if (url.contains('/uploads/')) {
+    final parts = url.split('/uploads/');
+    return '$baseUrl/uploads/${parts.last}';
   }
+
+  // إذا ما فيه uploads (رابط غريب)، رجعيه زي ما هو
+  return url;
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 216, 216, 227),
+        backgroundColor: Colors.white,
         
         title: Text('All Products',
             style: FlutterFlowTheme.of(context).titleLarge.override(
                   fontFamily: 'Outfit',
-                  color: const Color.fromARGB(255, 124, 107, 146),
+                  color: const Color.fromARGB(255, 0, 0, 0),
                   letterSpacing: 0.0,
                 )),
         centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 216, 216, 227),
+      
+      backgroundColor: Colors.white,
+
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              padding: EdgeInsets.all(16),
-              itemCount: allProducts.length,
-              itemBuilder: (context, index) {
-                final product = allProducts[index];
-                final ownerName = ownerNamesCache[product['owner_id']] ?? 'Loading...';
+    ? const Center(child: CircularProgressIndicator())
+    : ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: allProducts.length + 1, // +1 for the counter on top
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                '🧺 Total Products: ${allProducts.length}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            );
+          }
+
+          final product = allProducts[index - 1]; // -1 to skip header
+          final ownerName = ownerNamesCache[product['owner_id']] ?? 'Loading...';
+
+            
 
                 return GestureDetector(
                   onTap: () {

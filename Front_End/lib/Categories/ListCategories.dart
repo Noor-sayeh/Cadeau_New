@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -30,7 +31,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.107:5000/api/categories'),
+        Uri.parse('${dotenv.env['BASE_URL']}/api/categories'),
         headers: {'Content-Type': 'application/json'},
       );
 

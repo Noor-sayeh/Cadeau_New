@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:cadeau_project/owner/details/owner_details_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'package:cadeau_project/custom/icon_button.dart';
@@ -75,7 +76,7 @@ class MemberListModel extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      final response = await http.get(Uri.parse('http://192.168.1.107:5000/api/users'));
+      final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/users'));
       if (response.statusCode == 200) {
         final List usersJson = json.decode(response.body);
         _allUsers = usersJson.map((json) => User.fromJson(json)).toList();
@@ -125,7 +126,7 @@ class User {
 }
 
 Future<List<User>> fetchUsers() async {
-  final response = await http.get(Uri.parse('http://192.168.1.107:5000/api/users'));
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/users'));
   if (response.statusCode == 200) {
     final List usersJson = json.decode(response.body);
     return usersJson.map((json) => User.fromJson(json)).toList();
@@ -134,7 +135,7 @@ Future<List<User>> fetchUsers() async {
   }
 }
 Future<void> deleteUser(String id) async {
-  final url = Uri.parse('http://192.168.1.107:5000/api/users/$id');
+  final url = Uri.parse('${dotenv.env['BASE_URL']}/api/users/$id');
 
   final response = await http.delete(url);
   if (response.statusCode != 200) {
@@ -150,12 +151,13 @@ class MemberListPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => MemberListModel()..fetchUsers(),
       child: Scaffold(
+        backgroundColor: Color(0xFFF8F8FC),
         appBar: AppBar(
   title:  Text(
   'Members',
   style: FlutterFlowTheme.of(context).titleLarge.override(
     fontFamily: 'Outfit',
-    color: Color.fromARGB(255, 124, 107, 146),
+    color: Color.fromARGB(255, 80, 69, 94),
     fontSize: 23, // Your custom size
     letterSpacing: 0,
   ),
@@ -169,7 +171,7 @@ class MemberListPage extends StatelessWidget {
   },
 ),
  // Back icon
-  backgroundColor: const Color.fromARGB(255, 251, 244, 255), ///const Color.fromARGB(255, 251, 244, 255),
+  backgroundColor: Color(0xFFF8F8FC), ///const Color.fromARGB(255, 251, 244, 255),
   elevation: 0,
   actionsIconTheme: IconThemeData(color: const Color.fromARGB(255, 88, 84, 84)), // Add + Trash icons
   actions: [

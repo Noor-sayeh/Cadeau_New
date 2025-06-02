@@ -3,6 +3,7 @@
 import 'package:cadeau_project/userHomePage/userHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:avatar_plus/avatar_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '/custom/theme.dart';
 import 'package:http/http.dart' as http;
@@ -49,7 +50,7 @@ class _Chooseing_AvatarState extends State<Chooseing_Avatar> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.107:5000/api/users/${widget.userId}'),
+        Uri.parse('${dotenv.env['BASE_URL']}/api/users/${widget.userId}'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'avatar': selectedAvatar}),
       );

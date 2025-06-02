@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:cadeau_project/Admin/messages/ChatWithOwnerWidget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show get;
 
 import '/custom/icon_button.dart';
@@ -45,7 +46,7 @@ class _AdminmessagesWidgetState extends State<AdminmessagesWidget> {
     super.dispose();
   }
   Future<List<dynamic>> fetchMessages(String ownerId) async {
-  final response = await http.get(Uri.parse('http://192.168.1.107:5000/messages/admin/$ownerId'));
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/messages/admin/$ownerId'));
   if (response.statusCode == 200) {
     return json.decode(response.body);
   } else {
@@ -55,10 +56,10 @@ class _AdminmessagesWidgetState extends State<AdminmessagesWidget> {
 Future<Map<String, dynamic>> fetchOwnersWithUnread() async {
   try {
     final ownersResponse = await http.get(
-      Uri.parse('http://192.168.1.107:5000/api/owners/all'),
+      Uri.parse('${dotenv.env['BASE_URL']}/api/owners/all'),
     );
     final unreadResponse = await http.get(
-      Uri.parse('http://192.168.1.107:5000/messages/unread/admin'),
+      Uri.parse('${dotenv.env['BASE_URL']}/messages/unread/admin'),
     );
 
     print('📦 Owners status: ${ownersResponse.statusCode}');
@@ -96,7 +97,7 @@ Future<Map<String, dynamic>> fetchOwnersWithUnread() async {
 
 Future<Map<String, int>> fetchUnreadCounts() async {
   final response = await http.get(
-    Uri.parse('http://192.168.1.107:5000/messages/unread/admin'),
+    Uri.parse('${dotenv.env['BASE_URL']}/messages/unread/admin'),
   );
   if (response.statusCode == 200) {
     final List data = json.decode(response.body);

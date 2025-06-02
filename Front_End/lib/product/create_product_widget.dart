@@ -1,4 +1,6 @@
 // ignore_for_file: unused_import, unnecessary_null_comparison
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '/custom/choice_chips.dart';
 import '/custom/icon_button.dart';
 import '/custom/theme.dart';
@@ -31,7 +33,7 @@ class CreateProductWidget extends StatefulWidget {
   State<CreateProductWidget> createState() => _CreateProductWidgetState();
 }
 Future<List<Map<String, dynamic>>> fetchCategories() async {
-  final response = await http.get(Uri.parse('http://192.168.1.107:5000/api/categories'));
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/categories'));
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
     final List categories = data['categories'];
@@ -48,7 +50,7 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
 
 
 Future<List<String>> fetchCategoryNames() async {
-  final response = await http.get(Uri.parse('http://192.168.1.107:5000/api/categories'));
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/categories'));
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
     final List<dynamic> categoryList = data['categories'];
@@ -127,7 +129,7 @@ Future<void> uploadProduct() async {
     return;
   }
 
-  final uri = Uri.parse('http://192.168.1.107:5000/api/addproduct');
+  final uri = Uri.parse('${dotenv.env['BASE_URL']}/api/addproduct');
   final request = http.MultipartRequest('POST', uri);
 
   request.fields['name'] = _model.productNameTextController.text;

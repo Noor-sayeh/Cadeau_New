@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, duplicate_import, unused_field
 
 import 'package:cadeau_project/owner/profile/owner_display_products/product_display_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '/custom/animations.dart';
@@ -50,10 +51,45 @@ class _OwnerProfileWidgetState extends State<OwnerProfileWidget>
 Map<String, dynamic>? ownerData;
 bool isLoadingOwner = true;
   final animationsMap = <String, AnimationInfo>{};
+
+
+  List<Map<String, dynamic>> ownerReviews = [];
+bool isLoadingReviews = true;
+
+Future<void> fetchOwnerReviews() async {
+  try {
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/reviews/owner/${widget.ownerId}');
+    print('📡 Fetching reviews from $url');
+
+    final response = await http.get(url);
+    print('🧾 Status Code: ${response.statusCode}');
+    print('📦 Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      setState(() {
+        ownerReviews = List<Map<String, dynamic>>.from(json['data']);
+        isLoadingReviews = false;
+      });
+    } else {
+      print('❌ Failed to fetch reviews');
+      setState(() {
+        isLoadingReviews = false;
+      });
+    }
+  } catch (e) {
+    print('🔥 Error fetching reviews: $e');
+    setState(() {
+      isLoadingReviews = false;
+    });
+  }
+}
+
+
 Future<void> fetchOwnerDetails() async {
   try {
     // 1. جهزي الرابط اللي بتطلبي منه بيانات الأونر
-    final url = Uri.parse('http://192.168.1.107:5000/api/owners/get/${widget.ownerId}');
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/owners/get/${widget.ownerId}');
     
     // 2. أرسلي طلب GET على الرابط
     final response = await http.get(url);
@@ -79,14 +115,39 @@ Future<void> fetchOwnerDetails() async {
     print('🔥 خطأ أثناء جلب بيانات الأونر: $e');
   }
 }
+Color _getColorFromName(String? name) {
+  if (name == null || name.isEmpty) return Colors.grey;
 
-String fixImageUrl(String url) {
-  if (url.startsWith('http://localhost')) {
-    return url.replaceFirst('http://localhost', 'http://192.168.1.104');
+  final int hash = name.codeUnits.fold(0, (prev, char) => prev + char);
+
+  final List<Color> colorPalette = [
+    Color.fromARGB(255, 192, 57, 95),
+    Color.fromARGB(255, 182, 61, 174),
+    Color.fromARGB(255, 147, 129, 226),
+    Color.fromARGB(255, 98, 123, 160),
+    Color.fromARGB(255, 136, 220, 230),
+    Color.fromARGB(255, 247, 117, 149),
+    Color.fromARGB(255, 255, 196, 123),
+    Color.fromARGB(255, 248, 149, 255),
+    Color.fromARGB(255, 141, 98, 166),
+    Color.fromARGB(255, 186, 93, 98),
+  ];
+
+  return colorPalette[hash % colorPalette.length];
+}
+
+
+
+ String fixImageUrl(String url) {
+  final baseUrl = dotenv.env['BASE_URL'] ?? '';
+
+  // استخراج /uploads/filename فقط من أي URL فيه IP
+  if (url.contains('/uploads/')) {
+    final parts = url.split('/uploads/');
+    return '$baseUrl/uploads/${parts.last}';
   }
-  if (url.contains('example.com')) {
-    return 'https://via.placeholder.com/120'; // صورة افتراضية بدل example.com
-  }
+
+  // إذا ما فيه uploads (رابط غريب)، رجعيه زي ما هو
   return url;
 }
 
@@ -95,7 +156,7 @@ String fixImageUrl(String url) {
     super.initState();
      
      _tabController = TabController(vsync: this, length: 2);
-
+    fetchOwnerReviews();
   // 2. أنشئ الموديل وربطه بالتاب كنترولر
   _model = createModel(context, () => OwnerProfileModel());
   _model.tabBarController = _tabController;
@@ -165,41 +226,16 @@ String fixImageUrl(String url) {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xFFCACAD7),
-        appBar: AppBar(
-          backgroundColor: Color(0xFF998BCF),
-          automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30,
-            borderWidth: 1,
-            buttonSize: 60,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(
-            'Profile',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: FlutterFlowTheme.of(context).primaryBackground,
-                  letterSpacing: 0.0,
-                ),
-          ),
-          actions: [],
-          centerTitle: false,
-          elevation: 0,
-        ),
+        backgroundColor: Colors.white,
+        
         body: SafeArea(
           top: true,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+            
+
+
               Expanded(
                 child: Align(
                   alignment: AlignmentDirectional(0, 0),
@@ -210,26 +246,36 @@ String fixImageUrl(String url) {
                       constraints: BoxConstraints(
                         maxWidth: 1170,
                       ),
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x33000000),
-                            offset: Offset(
-                              0,
-                              2,
-                            ),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      
                       child: Padding(
                         padding: EdgeInsets.all(12),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            Row(
+  children: [
+    GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Icon(
+        Icons.arrow_back,
+        color: Colors.black87,
+        size: 26,
+      ),
+    ),
+    SizedBox(width: 12),
+    Text(
+      'Profile',
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: Colors.black87,
+      ),
+    ),
+  ],
+),
+SizedBox(height: 12),
+
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(8, 8, 12, 8),
@@ -266,7 +312,7 @@ String fixImageUrl(String url) {
     ),
     SizedBox(height: 12),
     Text(
-      ownerData?['name'] ?? 'اسم غير متوفر',
+      ownerData?['name'] ?? 'Owner',
       style: FlutterFlowTheme.of(context).headlineMedium.override(
         fontFamily: 'Outfit',
         color: Colors.black,
@@ -438,218 +484,63 @@ String fixImageUrl(String url) {
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 12, 0, 0),
-                                            child: ListView(
-                                              padding: EdgeInsets.zero,
-                                              scrollDirection: Axis.vertical,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 0, 12),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      color: FlutterFlowTheme
-                                                              .of(context)
-                                                          .secondaryBackground,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      border: Border.all(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .alternate,
-                                                        width: 2,
-                                                      ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(4),
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        12,
-                                                                        8,
-                                                                        12,
-                                                                        8),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2),
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            44,
-                                                                        height:
-                                                                            44,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).accent1,
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10),
-                                                                          shape:
-                                                                              BoxShape.rectangle,
-                                                                          border:
-                                                                              Border.all(
-                                                                            color:
-                                                                                FlutterFlowTheme.of(context).primary,
-                                                                          ),
-                                                                        ),
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .person,
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primaryText,
-                                                                          size:
-                                                                              24,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              12,
-                                                                              0,
-                                                                              0,
-                                                                              0),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Text(
-                                                                            'UserName',
-                                                                            style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                                                                  fontFamily: 'Outfit',
-                                                                                  letterSpacing: 0.0,
-                                                                                ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                0,
-                                                                                4,
-                                                                                0,
-                                                                                0),
-                                                                            child:
-                                                                                Text(
-                                                                              'user@domainname.com',
-                                                                              style: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                    fontFamily: 'Outfit',
-                                                                                    letterSpacing: 0.0,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .end,
-                                                                  children: [
-                                                                    Row(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              0,
-                                                                              0,
-                                                                              4,
-                                                                              0),
-                                                                          child:
-                                                                              Text(
-                                                                            '5',
-                                                                            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                                                                  fontFamily: 'Outfit',
-                                                                                  letterSpacing: 0.0,
-                                                                                ),
-                                                                          ),
-                                                                        ),
-                                                                        Icon(
-                                                                          Icons
-                                                                              .star_rounded,
-                                                                          color:
-                                                                              Color(0xFF4B39EF),
-                                                                          size:
-                                                                              20,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        12,
-                                                                        0,
-                                                                        12,
-                                                                        8),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Expanded(
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    '\"These sports shoes are incredibly comfortable, lightweight, and provide excellent support for my feet during workouts and runs. I\'ve noticed a significant improvement in my performance since wearing them!\"',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelMedium
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Outfit',
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                            child: isLoadingReviews
+  ? Center(child: CircularProgressIndicator())
+  : ListView.builder(
+      itemCount: ownerReviews.length,
+      itemBuilder: (context, index) {
+        final review = ownerReviews[index];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(2, 2),
+                )
+              ],
+            ),
+            child: ListTile(
+              leading: review['userAvatar'] != null && review['userAvatar'].isNotEmpty
+    ? CircleAvatar(
+        backgroundImage: NetworkImage(review['userAvatar']),
+        radius: 24,
+      )
+    : CircleAvatar(
+        backgroundColor: _getColorFromName(review['userName']),
+        radius: 24,
+        child: Text(
+          review['userName'] != null && review['userName'].isNotEmpty
+              ? review['userName'][0].toUpperCase()
+              : '?',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
+
+
+              title: Text('${review['userName']}'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('“${review['comment']}”'),
+                  Text('⭐ ${review['rating']} – ${review['productName']}', style: TextStyle(color: Colors.black54)),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+
                                           ),
                                         ],
                                       ),

@@ -2,6 +2,7 @@
 
 import 'package:cadeau_project/custom/icon_button.dart';
 import 'package:cadeau_project/owner/menu/ownermenu_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '/custom/choice_chips.dart';
 import '/custom/theme.dart';
@@ -76,7 +77,7 @@ File? _selectedImage;
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.107:5000/api/categories'),
+      Uri.parse('${dotenv.env['BASE_URL']}/api/categories'),
     );
 
     request.fields['name'] = _model.keyTextController.text;

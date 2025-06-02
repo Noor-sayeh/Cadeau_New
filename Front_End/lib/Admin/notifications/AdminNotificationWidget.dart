@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class AdminNotificationWidget extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
 
     setState(() => _isLoading = true);
 
-    final uri = Uri.parse('http://192.168.1.107:5000/api/notifications/send');
+    final uri = Uri.parse('${dotenv.env['BASE_URL']}/api/notifications/send');
 
     try {
       final response = await http.post(
