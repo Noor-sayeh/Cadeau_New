@@ -1,4 +1,4 @@
-// ignore_for_file: duplicate_import, unused_import
+// ignore_for_file: duplicate_import, unused_import, invalid_use_of_visible_for_testing_member
 
 import 'dart:convert';
 

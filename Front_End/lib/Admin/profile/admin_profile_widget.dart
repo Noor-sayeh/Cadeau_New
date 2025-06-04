@@ -2,12 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:cadeau_project/Admin/Categories/CategoryProductsPage.dart';
 import 'package:cadeau_project/Admin/SalesChartPage.dart';
 import 'package:cadeau_project/Admin/cup_webview.dart';
 import 'package:cadeau_project/Admin/giftbox_webview.dart';
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
 import 'package:cadeau_project/Admin/messages/adminmessages_widget.dart';
-import 'package:cadeau_project/Admin/notifications/AdminNotificationWidget.dart';
+import 'package:cadeau_project/Admin/notifications/announcement.dart';
+import 'package:cadeau_project/Admin/notifications/n.dart';
 import 'package:cadeau_project/Admin/profile/announcment/JordanHolidaysWidget.dart';
 import 'package:cadeau_project/Admin/profile/settings/settingseditadmin_widget.dart';
 import 'package:cadeau_project/Admin/reviews.dart';
@@ -47,12 +49,123 @@ class _AdminProfileWidgetState extends State<AdminProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AdminProfileModel());
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    checkForNewNotifications(context);
+  });
   }
 @override
 void didChangeDependencies() {
   super.didChangeDependencies();
   setState(() {}); // This will refetch the unread count each time
 }
+Future<bool> hasUnseenOrPendingNotifications() async {
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/notifications'));
+  if (response.statusCode != 200) return false;
+
+  final List data = jsonDecode(response.body);
+  return data.any((n) =>
+    n['isSeen'] == false ||
+    ((n['content'] ?? '').contains('pending') && (n['orderStatus'] == null || n['orderStatus'] == 'pending')));
+}
+
+Future<void> checkForNewNotifications(BuildContext context) async {
+  // 1. Ask server to ensure pending orders have notifications
+  await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/notifications/scan-pending-orders'));
+
+  // 2. Fetch notifications
+  final response = await http.get(Uri.parse('${dotenv.env['BASE_URL']}/api/notifications'));
+  if (response.statusCode != 200) return;
+
+  final data = jsonDecode(response.body) as List;
+
+  // 3. Check if any notification is unseen
+  final hasUnseen = data.any((n) => n['isSeen'] == false);
+
+  // ✅ 4. Also check if there's any notification about a *still pending* order
+  final hasPendingOrderNotification = data.any((n) =>
+      (n['content'] ?? '').contains('pending') &&
+      (n['orderStatus'] == null || n['orderStatus'] == 'pending'));
+
+  if (hasUnseen || hasPendingOrderNotification) {
+    // Show the top-aligned dialog
+    showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: 'New Notifications',
+  transitionDuration: const Duration(milliseconds: 300),
+  transitionBuilder: (context, animation, secondaryAnimation, child) {
+    final curvedValue = Curves.easeInOut.transform(animation.value);
+    return Transform.translate(
+      offset: Offset(0, -50 * (1 - curvedValue)),
+      child: Opacity(opacity: animation.value, child: child),
+    );
+  },
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16), // Add padding from sides
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 370, // ⬅️ limits width to avoid overflow on small devices
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.notifications_active, color: Colors.deepOrange),
+                  const SizedBox(width: 10),
+                  Expanded( // ✅ Prevents overflow
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text(
+                          '🔔 New Notifications',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'You have unseen updates or pending orders.',
+                          style: TextStyle(fontSize: 13),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  },
+);
+
+  }
+}
+
 
   @override
   void dispose() {
@@ -224,7 +337,7 @@ void didChangeDependencies() {
    onTap: () async {
  Navigator.push(
   context,
-  MaterialPageRoute(builder: (_) =>  GiftBoxWebView()),
+  MaterialPageRoute(builder: (_) =>  AdminNotificationsWidget()),
 );
 },
         
@@ -243,12 +356,31 @@ void didChangeDependencies() {
                                   shape: BoxShape.circle,
                                 ),
                                 alignment: AlignmentDirectional(0, 0),
-                                child: Icon(
-                                  Icons.notifications_outlined,
-                                  color:
-                                      Colors.black,
-                                  size: 24,
-                                ),
+                                child:  FutureBuilder<bool>(
+  future: hasUnseenOrPendingNotifications(),
+  builder: (context, snapshot) {
+    final hasAlert = snapshot.data == true;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        const Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
+        if (hasAlert)
+          Positioned(
+            right: -1,
+            top: -1,
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+      ],
+    );
+  },
+),
                               ),
                             ),
                             Text(
@@ -525,6 +657,58 @@ child: InkWell(
                                   ],
                                 ),
 ),
+                              ),
+                                 Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
+                                    ///AdminAllReviewsWidget
+                                    ///
+              child: InkWell(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AdminCategoryListPage()),
+      );
+    },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 16, 8),
+                                      child: FaIcon(
+                                        Icons.category,
+                                        color: const Color(0xFF998BCF),
+                                        size: 24,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Text(
+                                          'Categories',
+                                          textAlign: TextAlign.start,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 16,
+                                                letterSpacing: 0.0,
+                                                color: Colors.black,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: Colors.black,
+                                      size: 24,
+                                    ),
+                                  ],
+                                ),
+              ),
                               ),
                               Padding(
                                 padding:

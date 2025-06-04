@@ -1,11 +1,18 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   content: { type: String, required: true },
   sentAt: { type: Date, default: Date.now },
+  triggeredBy: { type: String, default: 'system' },
+  isSeen: { type: Boolean, default: false },
+  status: {
+  type: String,
+  enum: ['pending', 'delivered'],
+  default: 'pending'
+}
+
 });
 
-const Notification = mongoose.model('Notification', notificationSchema);
 
-module.exports = Notification;
+module.exports = mongoose.model('Notification', notificationSchema);

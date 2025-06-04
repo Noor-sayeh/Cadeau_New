@@ -1,87 +1,101 @@
 const express = require('express');
 const router = express.Router();
-const FcmToken = require('../models/FcmToken');
 const User = require('../models/User');
-const Notification = require('../models/notification'); // إضافة نموذج الإشعارات
-const admin = require('../firebase'); // أو حسب المسار الصحيح لملف firebase.js
+const Notification = require('../models/notification');
+const Order = require('../models/Orders'); // ✅ REQUIRED for scan-pending-orders route
 
+// Admin sends notification
 router.post('/send', async (req, res) => {
   const { content, target } = req.body;
 
   try {
-    let tokens = [];
+    let users = [];
 
-    // تحديد من سيرسل له الإشعار
     if (target === 'owners') {
-      const owners = await User.find({ role: 'Owner' });
-      const ownerIds = owners.map((o) => o._id.toString());
-
-      const matchedTokens = await FcmToken.find({
-        userId: { $in: ownerIds },
-        token: { $nin: [null, ''] },
-      });
-
-      tokens = matchedTokens.map(t => t.token);
+      users = await User.find({ role: 'Owner' });
+    } else if (target === 'users') {
+      users = await User.find({ role: 'User' });
     } else {
-      const allTokens = await FcmToken.find({ token: { $nin: [null, ''] } });
-      tokens = allTokens.map(t => t.token);
+      users = await User.find(); // all
     }
 
-    // إذا لم تكن هناك توكنات
-    if (tokens.length === 0) {
-      return res.status(400).json({ message: 'No tokens available' });
-    }
+    const notifications = users.map(user => ({
+      userId: user._id,
+      content,
+      triggeredBy: 'admin'
+    }));
 
-    // رسالة الإشعار
-    const message = {
-      notification: {
-        title: '📢 Cadeau Admin Message',
-        body: content,
-      }
-    };
+    await Notification.insertMany(notifications);
 
-    // إرسال الإشعار لكل توكن بشكل فردي
-    let successCount = 0;
-    let failureCount = 0;
-
-    for (let token of tokens) {
-      try {
-        message.token = token; // إضافة التوكن إلى الرسالة
-        const response = await admin.messaging().send(message);
-
-        if (response.successCount === 1) {
-          successCount++;
-          
-          // حفظ الإشعار في قاعدة البيانات بعد إرساله بنجاح
-          const user = await FcmToken.findOne({ token }); // إيجاد المستخدم بناءً على التوكن
-          if (user) {
-            await Notification.create({
-              userId: user.userId, // تخزين معرف المستخدم الذي استلم الإشعار
-              content: content, // تخزين محتوى الإشعار
-              sentAt: new Date(), // تخزين وقت الإرسال
-              isSeen: false, // تحديد أن المستخدم لم يشاهد الإشعار بعد
-            });
-          }
-        } else {
-          failureCount++;
-        }
-      } catch (err) {
-        failureCount++;
-        console.error('❌ Error sending to token:', token, err.message);
-      }
-    }
-
-    res.json({
-      message: `✅ Sent to ${successCount} devices, failed: ${failureCount}`,
-    });
-
-  } catch (err) {
-    console.error('❌ Firebase send error:', err.message);
+    res.status(200).json({ message: `Notification sent to ${users.length} users.` });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to send notifications' });
   }
 });
-// تحديث حالة الإشعار عند مشاهدته
-router.post('/mark-as-seen', async (req, res) => {
+// تعديل route: GET /api/notifications
+router.get('/', async (req, res) => {
+  try {
+    // 1. Scan for pending orders
+    const pendingOrders = await Order.find({ status: 'pending' });
+    for (const order of pendingOrders) {
+      const exists = await Notification.findOne({
+        content: { $regex: order._id.toString(), $options: 'i' },
+      });
+
+      if (!exists) {
+        await Notification.create({
+          userId: null,
+          content: `Order ${order._id} from user ${order.userId} is still pending delivery.`,
+          triggeredBy: 'system',
+          status: 'pending',
+        });
+      }
+    }
+
+    // 2. Fetch and populate notifications
+    const notifications = await Notification.find()
+      .sort({ sentAt: -1 })
+      .populate('userId', 'name');
+
+    // 3. Enhance each with real order status and order details
+    const enhanced = await Promise.all(
+      notifications.map(async (notif) => {
+        const notifObj = notif.toObject(); // make it modifiable
+
+        const match = notif.content.match(/Order (\w+)/);
+        if (match && match[1]) {
+          const order = await Order.findById(match[1]).lean();
+          if (order) {
+            notifObj.orderStatus = order.status;
+            notifObj.orderDetails = order;
+          }
+        }
+
+        return notifObj;
+      })
+    );
+
+    res.status(200).json(enhanced);
+  } catch (err) {
+    console.error('❌ Error in GET /notifications:', err.message);
+    res.status(500).json({ error: 'Failed to fetch notifications' });
+  }
+});
+
+
+
+
+// Get notifications for user
+router.get('/:userId', async (req, res) => {
+  try {
+    const notifications = await Notification.find({ userId: req.params.userId }).sort({ sentAt: -1 });
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch notifications' });
+  }
+});
+router.post('/mark-delivered', async (req, res) => {
   const { notificationId } = req.body;
 
   try {
@@ -90,14 +104,63 @@ router.post('/mark-as-seen', async (req, res) => {
       return res.status(404).json({ error: 'Notification not found' });
     }
 
-    notification.isSeen = true; // تحديث حالة الإشعار
+    // 1. Extract the order ID from the content
+    const match = notification.content.match(/Order (\w+)/);
+    if (!match || !match[1]) {
+      return res.status(400).json({ error: 'Order ID not found in notification content' });
+    }
+
+    const orderId = match[1];
+
+    // 2. Update the order
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, { status: 'delivery' }, { new: true });
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // 3. Update the notification
+    notification.status = 'delivered';
     await notification.save();
 
-    res.json({ message: 'Notification marked as seen' });
-  } catch (err) {
-    console.error('❌ Error marking notification as seen:', err.message);
-    res.status(500).json({ error: 'Failed to mark notification as seen' });
+    res.json({ message: 'Order and notification marked as delivered' });
+  } catch (error) {
+    console.error('❌ Error updating order and notification:', error.message);
+    res.status(500).json({ error: 'Failed to update status' });
   }
+});
+
+
+
+
+
+
+
+// Mark one as seen
+router.post('/mark-all-seen', async (req, res) => {
+  try {
+    await Notification.updateMany({ isSeen: false }, { $set: { isSeen: true } });
+    res.json({ message: 'All notifications marked as seen' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating notifications' });
+  }
+});
+router.get('/scan-pending-orders', async (req, res) => {
+  const pendingOrders = await Order.find({ status: 'pending' });
+  for (const order of pendingOrders) {
+    const exists = await Notification.findOne({
+      content: { $regex: order._id.toString(), $options: 'i' },
+    });
+
+    if (!exists) {
+      await Notification.create({
+        userId: null,
+        content: `Order ${order._id} from user ${order.userId} is still pending delivery.`,
+        triggeredBy: 'system',
+      });
+    }
+  }
+
+  res.status(200).json({ message: 'Pending order scan complete' });
 });
 
 

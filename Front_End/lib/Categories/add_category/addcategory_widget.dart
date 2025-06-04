@@ -24,8 +24,11 @@ export 'addcategory_model.dart';
 class AddcategoryWidget extends StatefulWidget {
   
 final String ownerId; // 
+final String caller; // "owner" or "admin"
 
-  const AddcategoryWidget({Key? key, required this.ownerId}) : super(key: key); 
+const AddcategoryWidget({Key? key, required this.ownerId, required this.caller}) : super(key: key);
+
+
   static String routeName = 'addcategory';
   static String routePath = '/addcategory';
 
@@ -82,6 +85,7 @@ File? _selectedImage;
 
     request.fields['name'] = _model.keyTextController.text;
     request.fields['icon'] = _model.choiceChipsValue!;
+    request.fields['ownerId'] = widget.ownerId;
 
     request.files.add(await http.MultipartFile.fromPath(
       'image',
@@ -179,46 +183,7 @@ File? _selectedImage;
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        appBar: AppBar(
-  backgroundColor: Color(0xFF998BCF),
-  automaticallyImplyLeading: false,
-  title: Text(
-    'Create Category',
-    style: FlutterFlowTheme.of(context).headlineMedium.override(
-          fontFamily: 'Outfit',
-          color: Colors.white,
-          fontSize: 20,
-          letterSpacing: 0.0,
-        ),
-  ),
-  actions: [
-    Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 8, 12, 8),
-      child: FlutterFlowIconButton(
-        borderColor: FlutterFlowTheme.of(context).alternate,
-        borderRadius: 12,
-        borderWidth: 1,
-        buttonSize: 40,
-        fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-        icon: Icon(
-          Icons.close_rounded,
-          color: FlutterFlowTheme.of(context).primaryText,
-          size: 24,
-        ),
-        onPressed: () async {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OwnermenuWidget(ownerId: widget.ownerId),
-            ),
-          );
-        },
-      ),
-    ),
-  ],
-  centerTitle: false,
-  elevation: 0,
-),
+       
 
         body: SafeArea(
           top: true,
@@ -226,6 +191,50 @@ File? _selectedImage;
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
+                Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  child: Row(
+    children: [
+      InkWell(
+        onTap: () {
+          if (widget.caller == 'admin') {
+            Navigator.pop(context);
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OwnermenuWidget(ownerId: widget.ownerId),
+              ),
+            );
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Color(0xFFECE6FC),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            Icons.arrow_back,
+            size: 20,
+            color: Colors.black,///Icons.arrow_back, color: Colors.black
+          ),
+        ),
+      ),
+      const SizedBox(width: 16),
+      Text(
+        'Create Category',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Color.fromARGB(255, 0, 0, 0),
+        ),
+      ),
+    ],
+  ),
+),
+
                 SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,

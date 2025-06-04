@@ -16,21 +16,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'settingseditadmin_model.dart';
 export 'settingseditadmin_model.dart';
-
 class SettingseditadminWidget extends StatefulWidget {
   const SettingseditadminWidget({super.key});
 
-  static String routeName = 'Settingseditadmin';
-  static String routePath = '/settingseditadmin';
-
   @override
-  State<SettingseditadminWidget> createState() =>
-      _SettingseditadminWidgetState();
+  State<SettingseditadminWidget> createState() => _SettingseditadminWidgetState();
 }
 
 class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
   late SettingseditadminModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -40,296 +34,172 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
 
     _model.textController1 ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
-
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
-      fetchAdminName().then((name) {
-    if (name != null) {
-      setState(() {
-        _model.textController1.text = name;
-      });
-    }
-  });
+
+    fetchAdminName().then((name) {
+      if (name != null) {
+        setState(() {
+          _model.textController1.text = name;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
-
-
-Future<void> updateAdminName(String adminId, String name) async {
-  final url = Uri.parse('${dotenv.env['BASE_URL']}/api/admin/$adminId/update');
-
-  final response = await http.put(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'name': name}),
-  );
-
-  if (response.statusCode == 200) {
-    print('✅ Admin name updated successfully.');
-  } else {
-    print('❌ Failed to update name: ${response.body}');
+  Future<void> updateAdminName(String adminId, String name) async {
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/admin/$adminId/update');
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'name': name}),
+    );
+    if (response.statusCode == 200) {
+      print('✅ Admin name updated successfully.');
+    } else {
+      print('❌ Failed to update name: ${response.body}');
+    }
   }
-}
-Future<String?> fetchAdminName() async {
-  final url = Uri.parse('${dotenv.env['BASE_URL']}/api/admin/admin-info');
 
-  final response = await http.get(url, headers: {
-    'Content-Type': 'application/json',
-    // Add auth headers if needed
-  });
-
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    return data['name']; // "Admin"
-  } else {
-    print('Failed to fetch admin info: ${response.body}');
-    return null;
+  Future<String?> fetchAdminName() async {
+    final url = Uri.parse('${dotenv.env['BASE_URL']}/api/admin/admin-info');
+    final response = await http.get(url, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['name'];
+    } else {
+      print('Failed to fetch admin info: ${response.body}');
+      return null;
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF998BCF),
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          buttonSize: 48,
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: FlutterFlowTheme.of(context).info,
-            size: 25,
-          ),
-            onPressed: () {
-    Navigator.pop(context); // This pops the current route
-  },
-        ),
-        title: Text(
-          'Profile Settings',
-          style: FlutterFlowTheme.of(context).titleSmall.override(
-                fontFamily: 'Outfit',
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-                letterSpacing: 0.0,
-              ),
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 0,
-      ),
+      backgroundColor: Color(0xFFF5F4FA),
       body: SafeArea(
-        top: true,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Custom header
               Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Profile Settings',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      'Your information',
-                      style: FlutterFlowTheme.of(context).titleSmall.override(
-                            fontFamily: 'Outfit',
-                            letterSpacing: 0.0,
-                          ),
+              SizedBox(height: 32),
+
+              Text(
+                'Your Information',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+              ),
+              SizedBox(height: 16),
+
+              // Name field
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
                     ),
                   ],
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                            child: TextFormField(
-                              controller: _model.textController1,
-                              focusNode: _model.textFieldFocusNode1,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                labelText: 'Your Name',
-                                labelStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      letterSpacing: 0.0,
-                                    ),
-                                hintText: 'Admin',
-                                hintStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      letterSpacing: 0.0,
-                                    ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    letterSpacing: 0.0,
-                                  ),
-                              validator: _model.textController1Validator
-                                  .asValidator(context),
-                            ),
-                          ),
-                        ),
-                      ].divide(SizedBox(width: 5)),
+                child: TextFormField(
+                  controller: _model.textController1,
+                  focusNode: _model.textFieldFocusNode1,
+                  decoration: InputDecoration(
+                    labelText: 'Your Name',
+                    hintText: 'Admin',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF998BCF), width: 2),
                     ),
-                   
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 8),
-                      //ResetpassWidget
-                        child: InkWell(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ResetpassWidget()),
-      );
-    },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 8, 16, 8),
-                            child: Icon(
-                              Icons.lock,
-                              color: Color(0xFF998BCF),
-                              size: 24,
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
-                              child: Text(
-                                'Reset Password',
-                                textAlign: TextAlign.start,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Outfit',
-                                      fontSize: 16,
-                                      letterSpacing: 0.0,
-                                      color: Colors.black,
-                                    ),
-                              ),
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right_rounded,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                        ),
-                    ),
-                  ],
-                ),
-              ),
-              FFButtonWidget(
-                onPressed: () async {
-  final adminId = '68037c897aea2125f35f30a0'; // Replace with actual logged-in admin ID
-  final name = _model.textController1.text.trim();
-
-  if (name.isNotEmpty) {
-    await updateAdminName(adminId, name);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Name updated successfully')),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Name cannot be empty')),
-    );
-  }
-},
-
-                text: 'Save Changes',
-                options: FFButtonOptions(
-                  width: 270,
-                  height: 50,
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                  iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                  color: Color(0xFF998BCF),
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        fontFamily: 'Outfit',
-                        color: Colors.white,
-                        letterSpacing: 0.0,
-                      ),
-                  elevation: 3,
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                    width: 1,
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  validator: _model.textController1Validator.asValidator(context),
                 ),
               ),
-            ].divide(SizedBox(height: 5)),
+
+              SizedBox(height: 32),
+
+              // Reset Password Card
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const ResetpassWidget()));
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.lock, color: Color(0xFF998BCF)),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Reset Password',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                      Icon(Icons.chevron_right_rounded, color: Colors.grey),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 40),
+
+              // Save Button
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    final adminId = '68037c897aea2125f35f30a0';
+                    final name = _model.textController1.text.trim();
+
+                    if (name.isNotEmpty) {
+                      await updateAdminName(adminId, name);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Name updated successfully')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Name cannot be empty')),
+                      );
+                    }
+                  },
+                  icon: Icon(Icons.save),
+                  label: Text('Save Changes'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF998BCF),
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

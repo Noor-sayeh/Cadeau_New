@@ -5,6 +5,7 @@ import 'package:cadeau_project/Sign_login/Authentication.dart';
 import 'package:cadeau_project/owner/ChatWithAdminWidget.dart';
 import 'package:cadeau_project/owner/profile/owner_profile_widget.dart';
 import 'package:cadeau_project/userHomePage/userHomePage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '/custom/theme.dart';
 import '/custom/util.dart';
@@ -43,7 +44,7 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
   }
 
    Future<void> fetchOwnerData() async {
-    final url = 'http://192.168.1.127:5000/api/owners/get/${widget.ownerId}';
+    final url = '${dotenv.env['BASE_URL']}/api/owners/get/${widget.ownerId}';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -62,7 +63,7 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
 
 Future<bool> hasUnreadFromAdmin() async {
   final response = await http.get(
-    Uri.parse('http://192.168.1.127:5000/messages/unread/owner/${widget.ownerId}'),
+    Uri.parse('${dotenv.env['BASE_URL']}/messages/unread/owner/${widget.ownerId}'),
   );
 
   if (response.statusCode == 200) {
@@ -335,7 +336,7 @@ Future<bool> hasUnreadFromAdmin() async {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => AddcategoryWidget(ownerId: widget.ownerId),
+      builder: (context) => AddcategoryWidget(ownerId: widget.ownerId,caller: 'owner'),
     ),
   );
 },
