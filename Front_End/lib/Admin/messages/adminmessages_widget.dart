@@ -120,35 +120,24 @@ Future<Map<String, int>> fetchUnreadCounts() async {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         appBar: AppBar(
-          backgroundColor: Color(0xFF998BCF),
-          automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30,
-            borderWidth: 1,
-            buttonSize: 50,
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-              size: 25,
-            ),
-            onPressed: () async {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(
-            'My messages',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  fontSize: 20,
-                  letterSpacing: 0.0,
-                ),
-          ),
-          actions: [],
-          centerTitle: false,
-          elevation: 0,
-        ),
+  backgroundColor: Colors.white,
+  automaticallyImplyLeading: false,
+  leading: IconButton(
+    icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
+    onPressed: () => Navigator.pop(context),
+  ),
+  title: Text(
+    'Admin Messages',
+    style: GoogleFonts.outfit(
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+  ),
+  elevation: 0,
+  centerTitle: true,
+),
+
         body: SafeArea(
           top: true,
           child: SingleChildScrollView(
@@ -157,16 +146,18 @@ Future<Map<String, int>> fetchUnreadCounts() async {
               crossAxisAlignment: CrossAxisAlignment.start,
               
               children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 15, 0, 0),
-                  child: Text(
-                    'Below are messages with your owners.',
-                    style: FlutterFlowTheme.of(context).labelMedium.override(
-                          fontFamily: 'Outfit',
-                          letterSpacing: 0.0,
-                        ),
-                  ),
-                ),
+               Padding(
+  padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+  child: Text(
+    'View and manage your conversations with all owners:',
+    style: GoogleFonts.outfit(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.black87,
+    ),
+  ),
+),
+
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                   child: Column(
@@ -221,30 +212,42 @@ physics: NeverScrollableScrollPhysics(),
           final unread = unreadCounts[owner['_id']];
 
           return ListTile(
-            leading: CircleAvatar(child: Text(owner['name'][0])),
-            title: Text(owner['name']),
-            subtitle: Text(owner['email']),
-            trailing: unread != null
-                ? Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text('$unread', style: TextStyle(color: Colors.white)),
-                  )
-                : Icon(Icons.chevron_right),
-            onTap: () async {
-  await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ChatWithOwnerWidget(ownerId: owner['_id']),
+  leading: CircleAvatar(
+    backgroundColor: const Color(0xFF998BCF),
+    child: Text(
+      owner['name'][0].toUpperCase(),
+      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     ),
-  );
-  setState(() {}); // Re-fetches unread count
-}
+  ),
+  title: Text(
+    owner['name'],
+    style: const TextStyle(fontWeight: FontWeight.w600),
+  ),
+  subtitle: Text(owner['email']),
+  trailing: unread != null
+      ? Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.redAccent,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            '$unread',
+            style: const TextStyle(color: Colors.white),
+          ),
+        )
+      : const Icon(Icons.chevron_right),
+  onTap: () async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatWithOwnerWidget(ownerId: owner['_id']),
+      ),
+    );
+    setState(() {}); // Refresh unread count
+  },
+);
 
-          );
         },
       );
     }

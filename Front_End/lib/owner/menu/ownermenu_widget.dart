@@ -3,6 +3,7 @@
 import 'package:cadeau_project/Categories/add_category/addcategory_widget.dart';
 import 'package:cadeau_project/Sign_login/Authentication.dart';
 import 'package:cadeau_project/owner/ChatWithAdminWidget.dart';
+import 'package:cadeau_project/owner/OwnerAllNotificationsWidget.dart';
 import 'package:cadeau_project/owner/profile/owner_profile_widget.dart';
 import 'package:cadeau_project/userHomePage/userHomePage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,6 +33,8 @@ class OwnermenuWidget extends StatefulWidget {
 }
 
 class _OwnermenuWidgetState extends State<OwnermenuWidget> {
+  Map<String, dynamic>? latestUnseenNotification;
+
   Map<String, dynamic>? ownerData;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -41,7 +44,108 @@ class _OwnermenuWidgetState extends State<OwnermenuWidget> {
   void initState() {
     super.initState();
     fetchOwnerData();
+     fetchOwnerData().then((_) => fetchLatestUnseenNotification());
   }
+Future<bool> hasUnreadNotifications() async {
+  final response = await http.get(
+    Uri.parse('${dotenv.env['BASE_URL']}/api/notifications/${widget.ownerId}'),
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> allNotifs = json.decode(response.body);
+
+    // ✅ فقط الغير مقروءة
+    return allNotifs.any((n) => n['isSeen'] == false);
+  } else {
+    print('❌ Failed to fetch notifications');
+    return false;
+  }
+}
+Future<void> fetchLatestUnseenNotification() async {
+  final response = await http.get(
+    Uri.parse('${dotenv.env['BASE_URL']}/api/notifications/${widget.ownerId}'),
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> allNotifs = json.decode(response.body);
+    final unseenNotifs = allNotifs
+        .where((n) => n['isSeen'] == false)
+        .toList();
+
+    if (unseenNotifs.isNotEmpty) {
+      // Sort by sentAt and pick the latest
+      unseenNotifs.sort((a, b) => DateTime.parse(b['sentAt']).compareTo(DateTime.parse(a['sentAt'])));
+      latestUnseenNotification = unseenNotifs.first;
+
+      await Future.delayed(Duration(milliseconds: 300)); // slight delay for UI to be ready
+
+      // Show dialog
+     if (context.mounted) {
+  showDialog(
+    context: context,
+    barrierColor: Colors.transparent,
+    barrierDismissible: false,
+    builder: (context) {
+      return Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 60, left: 16, right: 16),
+          child: Material(
+            elevation: 8,
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.deepOrange.shade200, width: 1),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.notifications_active, color: Colors.deepOrange),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          '🔔 New Notification',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          latestUnseenNotification!['content'] ?? '',
+                          style: const TextStyle(fontSize: 13),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+    }
+  } else {
+    print('❌ Failed to fetch owner notifications');
+  }
+}
+
 
    Future<void> fetchOwnerData() async {
     final url = '${dotenv.env['BASE_URL']}/api/owners/get/${widget.ownerId}';
@@ -229,6 +333,87 @@ Future<bool> hasUnreadFromAdmin() async {
                       ),
                     ),
                   ),
+                  Padding(
+  padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+  child: FutureBuilder<bool>(
+    future: hasUnreadNotifications(),
+    builder: (context, snapshot) {
+      final hasUnread = snapshot.hasData && snapshot.data!;
+
+      return Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: FlutterFlowTheme.of(context).alternate,
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  const Icon(Icons.notifications_active, color: Colors.black, size: 24),
+                  FFButtonWidget(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => OwnerAllNotificationsWidget(ownerId: widget.ownerId),
+                        ),
+                      );
+                    },
+                    text: 'View Notifications',
+                    options: FFButtonOptions(
+                      width: 300,
+                      height: 40,
+                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                      color: Colors.white,
+                      textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                            fontFamily: 'Outfit',
+                            letterSpacing: 0.0,
+                          ),
+                      elevation: 0,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (hasUnread)
+            Positioned(
+              top: 6,
+              right: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  'New',
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ),
+            ),
+        ],
+      );
+    },
+  ),
+),
+
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                     child: Container(

@@ -1,4 +1,5 @@
 import 'package:avatar_plus/avatar_plus.dart';
+import 'package:cadeau_project/Admin/notifications/user.dart';
 import 'package:cadeau_project/avatar_chat_page/avatar_chat_page.dart';
 import 'package:cadeau_project/userHomePage/userHomePage_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -236,7 +237,13 @@ class _userHomePageState extends State<userHomePage> {
                             size: 24,
                           ),
                           onPressed: () {
-                            print('IconButton pressed ...');
+                            Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => UserDeliveryNotificationsWidget(userId: widget.userId,),
+  ),
+);
+
                           },
                         ),
                       ),

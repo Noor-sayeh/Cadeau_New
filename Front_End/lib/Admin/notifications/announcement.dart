@@ -12,9 +12,27 @@ class AdminNotificationWidget extends StatefulWidget {
 
 class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
   final TextEditingController _messageController = TextEditingController();
-  String _target = 'all'; // 'all' or 'owners'
+  List<dynamic> holidays = [];
+bool showAllSuggestions = false;
+ String _target = 'users'; // ✅ match with DropdownMenuItem values
+ // 'all' or 'owners'
   bool _isLoading = false;
+  List<dynamic> owners = [];
+List<String> selectedOwnerIds = [];
 
+           final List<String> suggestions = [
+  "🎉 New discount offers this weekend!",
+  "🚨 Please check your product stock levels.",
+  "📦 We are improving our delivery process!",
+  "✨ Thank you for being part of our platform.",
+  "🎁 Check out our new gift collections just added!",
+  "🎉 A special surprise awaits you in the app now!",
+  "💡 Don’t forget to customize your gift box for your loved ones.",
+  "🧾 Owners: Kindly double-check your product stock status.",
+  "📦 We’ve improved our delivery timings for faster service!",
+  "🛍️ New categories are now available. Explore and add more items.",
+  "🎈 Send joy with our pre-designed gift cards – now live!",
+];
   Future<void> sendNotification() async {
     final message = _messageController.text.trim();
 
@@ -34,8 +52,9 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
         uri,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'content': message,
-          'target': _target,
+           'content': message,
+  'target': _target,
+  'userIds': _target == 'owners' ? selectedOwnerIds : [],
         }),
       );
 
@@ -56,11 +75,70 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
       );
     }
   }
+ Future<void> fetchOwners() async {
+  final url = Uri.parse('${dotenv.env['BASE_URL']}/api/owners/all');
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      setState(() {
+        owners = body['owners']; // ✅ حدد المفتاح الصحيح من الـ JSON
+      });
+    }
+  } catch (e) {
+    print('❌ Failed to fetch owners: $e');
+  }
+}
+
+Future<void> fetchJordanHolidays() async {
+  final apiKey = 'uubepAFbhk28YpAuLgDYogxLzLNRewHc';
+  final currentYear = DateTime.now().year;
+
+  final url = Uri.parse(
+    'https://calendarific.com/api/v2/holidays?api_key=$apiKey&country=JO&year=$currentYear',
+  );
+
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final all = data['response']['holidays'];
+
+      final today = DateTime.now();
+      final upcoming = all.where((holiday) {
+        final dateStr = holiday['date']['iso'];
+        final date = DateTime.tryParse(dateStr);
+        if (date == null) return false;
+
+        final diff = date.difference(today).inDays;
+        return diff >= 0 && diff <= 7;
+      }).toList();
+
+      setState(() {
+        holidays = upcoming;
+      });
+    }
+  } catch (e) {
+    print('❌ Failed to fetch holidays: $e');
+  }
+}
+
+
+@override
+void initState() {
+  super.initState();
+  fetchOwners();
+  fetchJordanHolidays();
+}
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
+ 
+    final validTargets = ['users', 'owners'];
+  if (!validTargets.contains(_target)) {
+    _target = 'users';
+  }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -94,12 +172,13 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 'Choose recipient',
                 style: textTheme.titleMedium?.copyWith(
                   fontFamily: 'Outfit',
                   fontWeight: FontWeight.w600,
+                  color: Color(0xFF3A3A3A), 
                 ),
               ),
               const SizedBox(height: 10),
@@ -109,14 +188,128 @@ class _AdminNotificationWidgetState extends State<AdminNotificationWidget> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
-                style: const TextStyle(fontFamily: 'Outfit', fontSize: 15),
+                  dropdownColor: Colors.white, // ✅ خلفية القائمة
+  style: const TextStyle(
+    fontFamily: 'Outfit',
+    fontSize: 15,
+    color: Color(0xFF3A3A3A), // ✅ لون النص
+  ),
                 items: const [
-                  DropdownMenuItem(value: 'all', child: Text('All Users')),
-                  DropdownMenuItem(value: 'owners', child: Text('Owners Only')),
+                 
+                  DropdownMenuItem(value: 'users', child: Text('Customers Only')),
+DropdownMenuItem(value: 'owners', child: Text('Owners Only')),
+
                 ],
                 onChanged: (val) => setState(() => _target = val!),
               ),
+              if (_target == 'owners') ...[
+  const SizedBox(height: 20),
+  Text(
+    'Select specific owners',
+    style: textTheme.titleMedium?.copyWith(
+      fontFamily: 'Outfit',
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+  const SizedBox(height: 8),
+  Wrap(
+    spacing: 8,
+    runSpacing: 8,
+    children: owners.map<Widget>((owner) {
+      final id = owner['_id'];
+      final name = owner['name'];
+      final isSelected = selectedOwnerIds.contains(id);
+
+      return FilterChip(
+        selected: isSelected,
+        label: Text(name, style: const TextStyle(fontFamily: 'Outfit')),
+        onSelected: (selected) {
+          setState(() {
+            if (selected) {
+              selectedOwnerIds.add(id);
+            } else {
+              selectedOwnerIds.remove(id);
+            }
+          });
+        },
+        selectedColor: const Color(0xFF998BCF),
+        checkmarkColor: Colors.white,
+      );
+    }).toList(),
+  ),
+],
+
               const SizedBox(height: 24),
+   const SizedBox(height: 16),
+Text(
+  '📆 Upcoming Holiday Suggestions',
+  style: textTheme.titleMedium?.copyWith(
+    fontFamily: 'Outfit',
+    fontWeight: FontWeight.w600,
+  ),
+),
+const SizedBox(height: 8),
+holidays.isEmpty
+    ? const Text('No holidays within the next 7 days.')
+    : Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: holidays.map<Widget>((holiday) {
+          final name = holiday['name'];
+          final date = holiday['date']['iso'];
+
+          return ActionChip(
+            label: Text('🎉 $name', style: const TextStyle(fontFamily: 'Outfit')),
+            backgroundColor: const Color(0xFFECEAFF),
+            onPressed: () {
+               final formattedDate = DateTime.tryParse(date)?.toLocal().toString().split(' ')[0] ?? date;
+
+  if (_target == 'owners') {
+    _messageController.text =
+      "🛒 $name is approaching on $formattedDate – make sure your products are up!";
+  } else {
+    _messageController.text =
+      "🎉 Wishing you a joyful $name on $formattedDate – from all of us!";
+  }
+            },
+          );
+        }).toList(),
+      ),
+
+const SizedBox(height: 16),
+Text(
+  'Suggestions',
+  style: textTheme.titleMedium?.copyWith(
+    fontFamily: 'Outfit',
+    fontWeight: FontWeight.w600,
+  ),
+),
+const SizedBox(height: 8),
+
+Wrap(
+  spacing: 8,
+  runSpacing: 8,
+  children: (showAllSuggestions ? suggestions : suggestions.take(2)).map((s) {
+    return ActionChip(
+      label: Text(s, style: const TextStyle(fontFamily: 'Outfit')),
+      backgroundColor: const Color(0xFFECEAFF),
+      onPressed: () {
+        _messageController.text = s;
+      },
+    );
+  }).toList(),
+),
+if (!showAllSuggestions && suggestions.length > 2)
+  TextButton.icon(
+    onPressed: () => setState(() => showAllSuggestions = true),
+    icon: const Icon(Icons.expand_more),
+    label: const Text('Show more suggestions'),
+    style: TextButton.styleFrom(
+      foregroundColor: Color(0xFF998BCF),
+    ),
+  ),
+
+
               Text(
                 'Message content',
                 style: textTheme.titleMedium?.copyWith(

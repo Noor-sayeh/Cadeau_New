@@ -48,10 +48,14 @@ class _AdminNotificationsWidgetState extends State<AdminNotificationsWidget> {
         };
 
         // Filter only order notifications with valid orderDetails
-        final filtered = notifData.where((n) =>
-  (n['orderDetails'] != null && n['content']?.toLowerCase().contains('order') == true)
-  || !(n['content']?.toLowerCase().contains('order') ?? false)
+       final filtered = notifData.where((n) =>
+  n['triggeredBy'] != 'admin' && // ✅ exclude admin-generated messages
+  (
+    (n['orderDetails'] != null && n['content']?.toLowerCase().contains('order') == true)
+    || !(n['content']?.toLowerCase().contains('order') ?? false)
+  )
 ).toList();
+
 
         // Sort descending (newest first)
         filtered.sort((a, b) =>
@@ -139,7 +143,12 @@ final isDelivered = isOrder && order['status'] == 'delivery';
 
                           final sentAt = notif['sentAt'] ?? '';
                          
-                          final displayNumber = notifications.length - index; // 🟢 newest gets #1
+                    String shortOrderId = '';
+if (order != null && order['_id'] != null && order['_id'].toString().length >= 8) {
+  shortOrderId = order['_id'].toString().substring(0, 8);
+}
+
+ // 🟢 newest gets #1
                           final userName = notif['userName'] ?? 'Unknown';
 
                           return InkWell(
@@ -183,7 +192,7 @@ final isDelivered = isOrder && order['status'] == 'delivery';
                                        Expanded(
   child: Text(
     isOrder
-      ? 'Order #$displayNumber from $userName - ${isDelivered ? "Delivered" : "Pending"}'
+      ? '#$shortOrderId from $userName - ${isDelivered ? "Delivered" : "Pending"}'
       : '$userName - ${notif['content']}',
     style: TextStyle(
       fontSize: 15,
