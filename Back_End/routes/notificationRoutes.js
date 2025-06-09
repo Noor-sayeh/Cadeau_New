@@ -6,17 +6,25 @@ const Order = require('../models/Orders'); // ✅ REQUIRED for scan-pending-orde
 
 // Admin sends notification
 router.post('/send', async (req, res) => {
-  const { content, target } = req.body;
+  const { content, target, userIds } = req.body;
 
   try {
     let users = [];
 
     if (target === 'owners') {
-      users = await User.find({ role: 'Owner' });
-    } else if (target === 'users') {
-      users = await User.find({ role: 'User' });
-    } else {
-      users = await User.find(); // all
+  if (Array.isArray(userIds) && userIds.length > 0) {
+    users = await User.find({ _id: { $in: userIds }, role: /^owner$/i });
+  } else {
+    users = await User.find({ role: /^owner$/i });
+  }
+} else if (target === 'users') {
+  users = await User.find({ role: /^customer$/i }); // ✅ يدعم "customer" و"Customer"
+} else {
+      return res.status(400).json({ error: 'Invalid target group' });
+    }
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'No users found for this target' });
     }
 
     const notifications = users.map(user => ({
@@ -29,10 +37,11 @@ router.post('/send', async (req, res) => {
 
     res.status(200).json({ message: `Notification sent to ${users.length} users.` });
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error sending notification:', error.message);
     res.status(500).json({ error: 'Failed to send notifications' });
   }
 });
+
 // تعديل route: GET /api/notifications
 router.get('/', async (req, res) => {
   try {
@@ -121,7 +130,12 @@ router.post('/mark-delivered', async (req, res) => {
     // 3. Update the notification
     notification.status = 'delivered';
     await notification.save();
-
+    await Notification.create({
+  userId: updatedOrder.userId,
+  content: `Your order ${orderId} is now out for delivery.`,
+  triggeredBy: 'system',
+  status: 'delivery'
+});
     res.json({ message: 'Order and notification marked as delivered' });
   } catch (error) {
     console.error('❌ Error updating order and notification:', error.message);

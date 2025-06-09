@@ -8,7 +8,7 @@ const notificationSchema = new mongoose.Schema({
   isSeen: { type: Boolean, default: false },
   status: {
   type: String,
-  enum: ['pending', 'delivered'],
+  enum: ['pending', 'delivered','delivery'],
   default: 'pending'
 }
 

@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const Notification = require('../models/notification');
 // @desc    Get all products (with filtering)
 // @route   GET /api/products
 // @access  Public
@@ -185,7 +186,13 @@ exports.addProduct = asyncHandler(async (req, res) => {
     });
 
     await product.save();
-
+    if (owner_id) {
+  await Notification.create({
+    userId: owner_id,
+    content: `You added a new product: ${product.name}`,
+    triggeredBy: 'system'
+  });
+}
     res.status(201).json({
       success: true,
       data: product
