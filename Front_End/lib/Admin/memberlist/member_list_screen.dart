@@ -155,17 +155,13 @@ class MemberListPage extends StatelessWidget {
         appBar: AppBar(
   title:  Text(
   'Members',
-  style: FlutterFlowTheme.of(context).titleLarge.override(
-    fontFamily: 'Outfit',
-    color: Color.fromARGB(255, 80, 69, 94),
-    fontSize: 23, // Your custom size
-    letterSpacing: 0,
-  ),
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+ 
 ),
-
+centerTitle: true,
   iconTheme: IconThemeData(color: Colors.white),
   leading: IconButton(
-  icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 88, 84, 84)),
+  icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 0, 0, 0)),
   onPressed: () {
     Navigator.pop(context); // This pops the current route
   },
@@ -205,14 +201,14 @@ class MemberListPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
+              child: Text('Cancel',style: TextStyle(color: Colors.black)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 124, 107, 146),
+                backgroundColor:  Color(0xFFD01C42),
               ),
               onPressed: () => Navigator.pop(context, true),
-              child: Text('Delete'),
+              child: Text('Delete', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -268,7 +264,7 @@ class MemberListPage extends StatelessWidget {
                     return ChoiceChip(
                       label: Text(
     filter,
-    style: TextStyle(color: isSelected ? Colors.white : mainPurple),
+    style: TextStyle(color: isSelected ? Colors.white : Colors.black),
   ),
   selected: isSelected,
   selectedColor: mainPurple,
@@ -289,7 +285,7 @@ class MemberListPage extends StatelessWidget {
                       return GestureDetector(
                         onLongPress: () => model.toggleUserSelection(user.id),
                         child: Container(
-                          color: isSelected ? Colors.purple.withOpacity(0.1) : null,
+                          color: isSelected ? Color.fromARGB(255, 124, 177, 255).withOpacity(0.1) : null,
                           child: buildUserTile(user, isSelected),
                         ),
                       );
@@ -305,7 +301,7 @@ class MemberListPage extends StatelessWidget {
   }
 }
 
-Color mainPurple = Color(0xFF998BCF);
+Color mainPurple = Color.fromARGB(255, 124, 177, 255);
 Widget buildUserTile(User user, bool isSelected) {
   return Card(
     color: isSelected ? mainPurple.withOpacity(0.1) : Colors.white,
@@ -322,8 +318,9 @@ Widget buildUserTile(User user, bool isSelected) {
     shape: BoxShape.circle,
     gradient: LinearGradient(
       colors: user.role.toLowerCase() == 'owner'
-        ? [const Color.fromARGB(255, 224, 84, 246), const Color.fromARGB(255, 205, 40, 211)]
-        : [Colors.blue, Colors.purple],
+       ? [Color.fromARGB(255, 124, 177, 255), Color.fromARGB(255, 255, 180, 68)]
+  : [Color.fromARGB(255, 255, 180, 68), Color.fromARGB(255, 255, 132, 0)]
+
     ),
     border: Border.all(color: Colors.white, width: 2),
   ),
@@ -341,7 +338,7 @@ Widget buildUserTile(User user, bool isSelected) {
         user.name,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: mainPurple,
+          color: Colors.black,
         ),
       ),
       subtitle: Text(user.email),

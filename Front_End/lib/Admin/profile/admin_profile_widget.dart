@@ -42,7 +42,7 @@ class AdminProfileWidget extends StatefulWidget {
 
 class _AdminProfileWidgetState extends State<AdminProfileWidget> {
   late AdminProfileModel _model;
-
+ 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -189,23 +189,27 @@ Future<void> checkForNewNotifications(BuildContext context) async {
 
   @override
   Widget build(BuildContext context) {
+   
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: const Color.fromARGB(255, 124, 107, 146),
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 124, 107, 146),
-          automaticallyImplyLeading: false,
-          actions: [],
-          centerTitle: false,
-          elevation: 0,
-        ),
+         
+  backgroundColor: Color.fromARGB(255, 124, 177, 255), // الخلفية الداكنة
+  appBar: AppBar(
+    backgroundColor: Color.fromARGB(255, 124, 177, 255),
+    elevation: 0,
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+      onPressed: () => Navigator.pop(context),
+    ),
+  ),
+
         body: Align(
           alignment: AlignmentDirectional(0, 0),
+          
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -217,23 +221,12 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                       alignment: AlignmentDirectional(0, 0),
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Align(
-                            alignment: AlignmentDirectional(0, 0),
-                            child: FaIcon(
-                              FontAwesomeIcons.userTie,
-                              color: Colors.black,
-                              size: 50,
-                            ),
-                          ),
-                        ),
+                        child: CircleAvatar(
+  radius: 50,
+  backgroundImage: AssetImage('assets/images/admin.webp'), // ضيفي الصورة لمجلد assets
+  backgroundColor: Colors.transparent,
+),
+
                       ),
                     ),
                   ],
@@ -324,7 +317,7 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                                   fontFamily: 'Outfit',
                                   fontSize: 18,
                                   letterSpacing: 0.0,
-                                  
+                                  color: Colors.white,
                                 ),
                           ),
                         ],
@@ -392,6 +385,7 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                                     fontFamily: 'Outfit',
                                     fontSize: 18,
                                     letterSpacing: 0.0,
+                                    color: Colors.white,
                                   ),
                             ),
                           ],
@@ -472,7 +466,7 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.campaign,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -523,7 +517,7 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.event,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -573,7 +567,7 @@ Future<void> checkForNewNotifications(BuildContext context) async {
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.person_search,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -627,7 +621,7 @@ child: InkWell(
                                       child: Icon(
                                         Icons
                                             .production_quantity_limits_outlined,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -679,7 +673,7 @@ child: InkWell(
                                           0, 8, 16, 8),
                                       child: FaIcon(
                                         Icons.category,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -729,7 +723,7 @@ child: InkWell(
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.query_stats,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -781,7 +775,7 @@ child: InkWell(
                                           0, 8, 16, 8),
                                       child: FaIcon(
                                         FontAwesomeIcons.award,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -832,7 +826,7 @@ child: InkWell(
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.edit,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         size: 24,
                                       ),
                                     ),
@@ -861,7 +855,7 @@ child: InkWell(
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Outfit',
-                                            color: const Color.fromARGB(255, 36, 27, 106),
+                                            color: Color.fromARGB(255, 255, 180, 68),
                                             letterSpacing: 0.0,
                                           ),
                                     ),
@@ -882,7 +876,7 @@ child: InkWell(
           ),
           title: Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFF998BCF)),
+              Icon(Icons.logout, color: Color(0xFFEF6C00)),
               SizedBox(width: 8),
               Text('Log Out'),
             ],
@@ -891,11 +885,14 @@ child: InkWell(
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
+              child: Text('Cancel',style: TextStyle(
+      color: Colors.black, // ✅ set your desired color here
+    ),),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF998BCF),
+                backgroundColor: Color.fromARGB(255, 255, 180, 68),
+                foregroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -924,7 +921,7 @@ child: InkWell(
                                           0, 8, 16, 8),
                                       child: Icon(
                                         Icons.login_rounded,
-                                        color: const Color(0xFF998BCF),
+                                        color: Color.fromARGB(255, 255, 180, 68),
                                         size: 24,
                                       ),
                                     ),
@@ -953,7 +950,7 @@ child: InkWell(
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Outfit',
-                                            color: const Color.fromARGB(255, 36, 27, 106),
+                                            color: Color.fromARGB(255, 255, 180, 68),
                                             letterSpacing: 0.0,
                                           ),
                                     ),

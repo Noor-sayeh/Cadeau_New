@@ -55,16 +55,12 @@ class _JordanHolidaysWidgetState extends State<JordanHolidaysWidget> {
       appBar: AppBar(
         title: const Text(
           '🇯🇴 Jordan Holidays 2025',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFF6F61EF)),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
@@ -127,10 +123,10 @@ class _JordanHolidaysWidgetState extends State<JordanHolidaysWidget> {
                               margin: const EdgeInsets.symmetric(vertical: 6),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(color: Color(0xFF6F61EF), width: 0.7),
+                                side: const BorderSide(color: Color.fromARGB(255, 124, 177, 255), width: 0.7),
                               ),
                               child: ListTile(
-                                leading: const Icon(Icons.event, color: Color(0xFF6F61EF)),
+                                leading: const Icon(Icons.event, color: Color.fromARGB(255, 124, 177, 255)),
                                 title: Text(
                                   name,
                                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),

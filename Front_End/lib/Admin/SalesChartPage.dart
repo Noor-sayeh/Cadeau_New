@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});
 
@@ -71,13 +72,15 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           '📊 Admin Dashboard',
           style: TextStyle(
             color: Color.fromARGB(255, 0, 0, 0),
-            fontWeight: FontWeight.bold,
+            
+            fontSize: 18, // Slightly smaller title font
+            fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 1,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFF6F61EF)),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -115,7 +118,7 @@ const SizedBox(height: 12),
   initiallyExpanded: false,
   title: Row(
     children: const [
-      Icon(Icons.bar_chart, color: Color(0xFF6F61EF)),
+      Icon(Icons.bar_chart, color: Color.fromARGB(255, 124, 177, 255)),
       SizedBox(width: 8),
       Text(
         '🧾 Monthly Sales Chart',
@@ -136,7 +139,7 @@ ExpansionTile(
   initiallyExpanded: false,
   title: Row(
     children: const [
-      Icon(Icons.star, color: Color(0xFF6F61EF)),
+      Icon(Icons.star, color: Color.fromARGB(255, 124, 177, 255)),
       SizedBox(width: 8),
       Text(
         '🏆 Top Selling Products',
@@ -157,7 +160,7 @@ ExpansionTile(
   initiallyExpanded: false, // ✅ مخفي بشكل افتراضي
   title: Row(
     children: const [
-      Icon(Icons.trending_up, color: Color(0xFF6F61EF)),
+      Icon(Icons.trending_up, color: Color.fromARGB(255, 124, 177, 255)),
       SizedBox(width: 8),
       Text(
         '👥 User Growth Trend',
@@ -197,7 +200,7 @@ ExpansionTile(
       ),
       child: Column(
         children: [
-          Icon(icon, size: 32, color: Color(0xFF6F61EF)),
+          Icon(icon, size: 32, color: Color.fromARGB(255, 124, 177, 255)),
           const SizedBox(height: 12),
           Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),

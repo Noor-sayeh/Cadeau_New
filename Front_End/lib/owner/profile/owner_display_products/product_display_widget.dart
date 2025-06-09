@@ -84,11 +84,7 @@ Widget build(BuildContext context) {
           SizedBox(width: 16),
           Text(
             'Details',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
           ),
         ],
       ),
@@ -107,7 +103,7 @@ Widget build(BuildContext context) {
       Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Color(0xFF998BCF),
+            color: Color.fromARGB(255, 124, 177, 255),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -149,7 +145,7 @@ Widget build(BuildContext context) {
         controller: _pageController,
         count: product['imageUrls']?.length ?? 1,
         effect: ExpandingDotsEffect(
-          activeDotColor: Color(0xFF998BCF), // ✨ نفس لون الأب بار
+          activeDotColor: Color.fromARGB(255, 124, 177, 255), // ✨ نفس لون الأب بار
           dotColor: Colors.grey.shade300,
           dotHeight: 8,
           dotWidth: 8,
@@ -270,7 +266,7 @@ if (product['keywords'] != null)
           text: 'Edit',
           options: FFButtonOptions(
             height: 48,
-            color: Color(0xFF998BCF),
+            color: Color.fromARGB(255, 124, 177, 255),
             textStyle: FlutterFlowTheme.of(context).titleSmall.override(
               fontFamily: 'Outfit',
               color: Colors.white,
@@ -304,7 +300,11 @@ if (product['keywords'] != null)
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context, false),
-        child: Text('Cancel'),
+        child: Text('Cancel',style: TextStyle(
+      fontFamily: 'Outfit',
+      color: Colors.black,
+       // أو استخدم GoogleFonts
+    ),),
       ),
       ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -314,7 +314,11 @@ if (product['keywords'] != null)
           ),
         ),
         onPressed: () => Navigator.pop(context, true),
-        child: Text('Yes, Delete'),
+        child: Text('Yes, Delete',style: TextStyle(
+      fontFamily: 'Outfit',
+      color: Colors.white,
+       // أو استخدم GoogleFonts
+    ),),
       ),
     ],
   ),
@@ -381,7 +385,7 @@ Widget buildChipsSection(String title, List<dynamic> items, IconData icon) {
       children: [
         Row(
           children: [
-            Icon(icon, color: Color(0xFF998BCF), size: 20),
+            Icon(icon, color: Color.fromARGB(255, 0, 0, 0), size: 20),
             SizedBox(width: 6),
             Text(
               title,
@@ -408,7 +412,7 @@ Widget buildChipsSection(String title, List<dynamic> items, IconData icon) {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Color(0xFF998BCF),
+                  color: Color.fromARGB(255, 124, 177, 255),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -464,7 +468,7 @@ Widget buildPriceRow(IconData icon, String title, String value) {
     padding: const EdgeInsets.symmetric(vertical: 6),
     child: Row(
       children: [
-        Icon(icon, color: Color(0xFF998BCF), size: 22),
+        Icon(icon, color: Color.fromARGB(255, 124, 177, 255), size: 22),
         SizedBox(width: 12),
         Expanded(
           child: Text(

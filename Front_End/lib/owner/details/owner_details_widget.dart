@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:cadeau_project/Admin/memberlist/member_list_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '/custom/choice_chips.dart';
 import '/custom/icon_button.dart';
@@ -102,7 +103,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
 
     // 3. Make API call
     final response = await http.post(
-      Uri.parse('http://192.168.1.127:5000/api/owners/add'), // Use your backend IP
+      Uri.parse('${dotenv.env['BASE_URL']}/api/owners/add'), // Use your backend IP
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(ownerData),
     );
@@ -153,18 +154,20 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         appBar: AppBar(
-          backgroundColor: Color(0xFF998BCF),
+          backgroundColor: Colors.white, // أو خلفية فاتحة لواجهة نظيفة
+
           automaticallyImplyLeading: false,
           title: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Owner information',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Outfit',
-                      letterSpacing: 0.0,
-                    ),
+                'Owner Creation',
+                style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
               ),
             ].divide(SizedBox(height: 4)),
           ),
@@ -179,8 +182,8 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                 fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                 icon: Icon(
                   Icons.close_rounded,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 24,
+                  color: Colors.black,
+                  size: 20,
                 ),
                 onPressed: () async {
                    
@@ -264,8 +267,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -348,8 +350,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -433,8 +434,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -518,8 +518,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -603,8 +602,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -678,25 +676,21 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         _model.choiceChipsValue =
                                             val?.firstOrNull),
                                     selectedChipStyle: ChipStyle(
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent2,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      iconColor: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      iconSize: 18,
-                                      elevation: 0,
-                                      borderColor: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      borderWidth: 2,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+  backgroundColor: Color.fromARGB(255, 124, 177, 255),
+  textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+    fontFamily: 'Outfit',
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.0,
+  ),
+  iconColor: Colors.black,
+  iconSize: 18,
+  elevation: 1,
+  borderColor: Colors.transparent,
+  borderWidth: 1,
+  borderRadius: BorderRadius.circular(8),
+),
+
                                     unselectedChipStyle: ChipStyle(
                                       backgroundColor:
                                           FlutterFlowTheme.of(context)
@@ -762,8 +756,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -850,8 +843,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -937,8 +929,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -1023,8 +1014,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
+                                          color: Color.fromARGB(255, 124, 177, 255),
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
@@ -1100,20 +1090,19 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                     },
                     text: 'Add Owner',
                     options: FFButtonOptions(
-                      width: 200,
-                      height: 40,
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                      iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                      color: Color(0xFF998BCF),
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Outfit',
-                                color: Colors.white,
-                                letterSpacing: 0.0,
-                              ),
-                      elevation: 0,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+  width: 380,
+  height: 55,
+  color: Color.fromARGB(255, 124, 177, 255),
+  textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+    fontFamily: 'Outfit',
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  ),
+  elevation: 6,
+  borderRadius: BorderRadius.circular(16),
+),
+
+
                   ),
                 ),
               ],

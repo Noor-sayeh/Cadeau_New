@@ -71,6 +71,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
     });
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +81,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
             CircleAvatar(
               radius: 16,
               backgroundColor: Colors.white,
-              child: Icon(Icons.admin_panel_settings, color: Color.fromARGB(255, 124, 107, 146)),
+              child: Icon(Icons.admin_panel_settings, color: Color.fromARGB(255, 124, 177, 255)),
             ),
             SizedBox(width: 12),
             Text(
@@ -89,7 +90,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
             ),
           ],
         ),
-        backgroundColor: Color.fromARGB(255, 124, 107, 146),
+        backgroundColor: Color.fromARGB(255, 124, 177, 255),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -101,7 +102,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
           gradient: LinearGradient(
             colors: [
               Colors.white,
-              Color.fromARGB(255, 124, 107, 146),
+              Color.fromARGB(255, 240, 245, 255),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -122,7 +123,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                       margin: EdgeInsets.symmetric(vertical: 4),
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
-                        color: isOwner ? Color.fromARGB(255, 124, 107, 146) : Colors.grey[100],
+                        color: isOwner ? Color.fromARGB(255, 124, 177, 255) : Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(isOwner ? 16 : 0),
                           topRight: Radius.circular(16),
@@ -131,7 +132,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withOpacity(0.05),
                             blurRadius: 6,
                             offset: Offset(0, 4),
                           ),
@@ -141,6 +142,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                         msg['content'],
                         style: TextStyle(
                           color: isOwner ? Colors.white : Colors.black87,
+                          fontSize: 15,
                         ),
                       ),
                     ),
@@ -156,11 +158,11 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withOpacity(0.05),
                             blurRadius: 6,
                             offset: Offset(0, 2),
                           ),
@@ -169,7 +171,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                       child: TextField(
                         controller: messageController,
                         decoration: InputDecoration(
-                          hintText: 'اكتب رسالة...',
+                          hintText: 'Type a message..',
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: 16),
                         ),
@@ -179,7 +181,7 @@ class _ChatWithAdminWidgetState extends State<ChatWithAdminWidget> {
                   ),
                   SizedBox(width: 8),
                   CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 124, 107, 146),
+                    backgroundColor: Color.fromARGB(255, 124, 177, 255),
                     child: IconButton(
                       icon: Icon(Icons.send, color: Colors.white, size: 20),
                       onPressed: sendMessage,

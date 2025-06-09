@@ -196,22 +196,7 @@ Future<bool> hasUnreadFromAdmin() async {
            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
 
             automaticallyImplyLeading: false,
-            title:  Text(
-  'Cadeau',
-  style: GoogleFonts.dancingScript(
-    color: const Color(0xFF998BCF),
-    fontSize: 38,
-    letterSpacing: 0.0,
-    fontWeight: FontWeight.w700,
-    shadows: [
-      Shadow(
-        blurRadius: 10,
-        color: Colors.black.withOpacity(0.3),
-        offset: Offset(2, 2),
-      ),
-    ],
-  ),
-),
+            
             actions: [],
             centerTitle: false,
             elevation: 0,
@@ -229,25 +214,28 @@ Future<bool> hasUnreadFromAdmin() async {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                     child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).accent1,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).primary,
-                          width: 2,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(
-                          FontAwesomeIcons.userShield,
-                          color: FlutterFlowTheme.of(context).primary,
-                          size: 40,
-                        ),
-                      ),
-                    ),
+  decoration: BoxDecoration(
+    color: FlutterFlowTheme.of(context).accent1,
+    shape: BoxShape.circle,
+    border: Border.all(
+      color: FlutterFlowTheme.of(context).primary,
+      width: 2,
+    ),
+  ),
+  child: Padding(
+    padding: EdgeInsets.all(2),
+    child: CircleAvatar(
+  radius: 60,
+  backgroundImage: AssetImage(
+    ownerData?['gender']?.toLowerCase() == 'female'
+        ? 'assets/images/ownergirl.avif'
+        : 'assets/images/ownerboy.avif',
+  ),
+  backgroundColor: Colors.transparent,
+),
+  ),
+),
+
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
@@ -258,6 +246,7 @@ Future<bool> hasUnreadFromAdmin() async {
                          style: FlutterFlowTheme.of(context).headlineSmall.override(
                            fontFamily: 'Outfit',
                            letterSpacing: 0.0,
+                           fontSize: 18,
                            color: const Color.fromARGB(255, 0, 0, 0),
                               ),
                         ),
@@ -267,7 +256,7 @@ Future<bool> hasUnreadFromAdmin() async {
                     thickness: 1,
                     indent: 24,
                     endIndent: 24,
-                    color: const Color(0xFF998BCF),
+                    color: Color.fromARGB(255, 124, 177, 255),
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
@@ -559,18 +548,18 @@ Padding(
             curve: Curves.easeInOut,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: hasUnread ? Color(0xFFD6D0FF) : Colors.white,
+              color: hasUnread ? Color.fromARGB(255, 124, 177, 255) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: hasUnread
-                    ? const Color.fromARGB(255, 124, 107, 146)
+                    ? Color.fromARGB(255, 124, 177, 255)
                     : FlutterFlowTheme.of(context).alternate,
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
                   color: hasUnread
-                      ? const Color.fromARGB(255, 124, 107, 146).withOpacity(0.6)
+                      ? Color.fromARGB(255, 124, 177, 255).withOpacity(0.6)
                       : Colors.grey.withOpacity(0.2),
                   spreadRadius: 4,
                   blurRadius: 10,
@@ -625,11 +614,11 @@ Padding(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Color(0xFF7C6B92),
+                  color: Color.fromARGB(255, 255, 180, 68),//Color.fromARGB(255, 124, 177, 255),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.purple.withOpacity(0.4),
+                      color: Color.fromARGB(255, 255, 180, 68).withOpacity(0.4),
                       blurRadius: 6,
                       offset: Offset(0, 2),
                     ),
@@ -670,7 +659,7 @@ Padding(
           ),
           title: Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFF998BCF)),
+              Icon(Icons.logout, color: Color.fromARGB(255, 255, 180, 68)),
               SizedBox(width: 8),
               Text('Log Out'),
             ],
@@ -681,18 +670,20 @@ Padding(
               onPressed: () => Navigator.pop(context, false),
               child: Text('Cancel' ,style: TextStyle(
       fontFamily: 'Outfit',
+      color: Colors.black,
        // أو استخدم GoogleFonts
     ),),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF998BCF),
+                backgroundColor: Color.fromARGB(255, 255, 180, 68),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: () => Navigator.pop(context, true),
               child: Text('Yes, Log Out',style: TextStyle(
+                color: Colors.black,
       fontFamily: 'Outfit', // أو استخدم GoogleFonts
     ),),
             ),
@@ -714,7 +705,7 @@ Padding(
     options: FFButtonOptions(
       width: 150,
       height: 44,
-      color: const Color(0xFF998BCF),
+      color: Color.fromARGB(255, 124, 177, 255),
       textStyle: TextStyle(
         color: Colors.white,
         fontFamily: 'Outfit',

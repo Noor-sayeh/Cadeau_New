@@ -123,8 +123,8 @@ File? _selectedImage;
   height: 160,
   decoration: BoxDecoration(
     shape: BoxShape.circle,
-    color: const Color.fromARGB(255, 177, 158, 203),
-    border: Border.all(color: const Color.fromARGB(255, 129, 7, 194), width: 3),
+    color: Color.fromARGB(255, 179, 201, 234),
+    border: Border.all(color: Color.fromARGB(255, 124, 177, 255), width: 3),
     image: _selectedImage != null
         ? DecorationImage(
             image: FileImage(_selectedImage!),
@@ -212,7 +212,7 @@ File? _selectedImage;
         child: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Color(0xFFECE6FC),
+            color: Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -223,14 +223,20 @@ File? _selectedImage;
         ),
       ),
       const SizedBox(width: 16),
-      Text(
-        'Create Category',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Color.fromARGB(255, 0, 0, 0),
-        ),
+     Expanded(
+  child: Center(
+    child: Text(
+      'Create Category',
+      style: TextStyle(
+        fontSize:18,
+        fontWeight: FontWeight.w600,
+        color: Color.fromARGB(255, 0, 0, 0),
       ),
+      textAlign: TextAlign.center,
+    ),
+  ),
+),
+
     ],
   ),
 ),
@@ -290,14 +296,14 @@ File? _selectedImage;
                                 ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 129, 7, 194),
+                                color: Color.fromARGB(255, 124, 177, 255),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 129, 7, 194),
+                                color: Color.fromARGB(255, 124, 177, 255),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(12),
@@ -384,13 +390,13 @@ File? _selectedImage;
               shape: BoxShape.circle,
               color: Colors.grey[200],
               border: isSelected
-                  ? Border.all(color: Color(0xFF998BCF), width: 3)
+                  ? Border.all(color: Color.fromARGB(255, 124, 177, 255), width: 3)
                   : null,
             ),
             child: Icon(
               icon,
               size: 30,
-              color: isSelected ? Color(0xFF998BCF) : Colors.black54,
+              color: isSelected ? Color.fromARGB(255, 124, 177, 255) : Colors.black54,
             ),
           ),
           SizedBox(height: 8),
@@ -399,7 +405,7 @@ File? _selectedImage;
             style: TextStyle(
               fontWeight:
                   isSelected ? FontWeight.bold : FontWeight.normal,
-              color: isSelected ? Color(0xFF998BCF) : Colors.black,
+              color: isSelected ? Color.fromARGB(255, 124, 177, 255) : Colors.black,
               fontSize: 12,
             ),
             textAlign: TextAlign.center,
@@ -436,7 +442,7 @@ File? _selectedImage;
                                 EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                             iconPadding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: Color(0xFF998BCF),
+                            color: Color.fromARGB(255, 124, 177, 255),
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
@@ -486,14 +492,14 @@ color: isSelected ? Colors.red : Colors.grey[200],
 
   border: isSelected
       ? Border.all(
-          color: Color(0xFF998BCF),
+          color: Color.fromARGB(255, 124, 177, 255),
           width: 3,
         )
       : null,
   boxShadow: isSelected
       ? [
           BoxShadow(
-            color: Color(0xFF998BCF).withOpacity(0.3),
+            color: Color.fromARGB(255, 124, 177, 255).withOpacity(0.3),
             blurRadius: 6,
             offset: Offset(0, 3),
           ),
@@ -514,7 +520,7 @@ color: isSelected ? Colors.red : Colors.grey[200],
           style: TextStyle(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? Color(0xFF998BCF) : Colors.black87,
+            color: isSelected ? Color.fromARGB(255, 124, 177, 255) : Colors.black87,
           ),
         )
       ],

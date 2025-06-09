@@ -148,16 +148,12 @@ Padding(
       const SizedBox(width: 12),
       Text(
         'Edit Product', // or 'Details', 'Edit Product'
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
       ),
     ],
   ),
 ),
-Divider(height: 24, thickness: 1),
+
 
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
@@ -202,14 +198,15 @@ Divider(height: 24, thickness: 1),
                                   ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: Color.fromARGB(255, 124, 177, 255),
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color(0xFF998BCF),
+                                  color: FlutterFlowTheme.of(context)
+                                              .primary,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
@@ -280,14 +277,15 @@ Divider(height: 24, thickness: 1),
                                   ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: Color.fromARGB(255, 124, 177, 255),
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color(0xFF998BCF),
+                                  color: FlutterFlowTheme.of(context)
+                                              .primary,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
@@ -381,8 +379,7 @@ Divider(height: 24, thickness: 1),
                                             ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
+                                            color: Color.fromARGB(255, 124, 177, 255),
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -390,7 +387,8 @@ Divider(height: 24, thickness: 1),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Color(0xFF998BCF),
+                                            color: FlutterFlowTheme.of(context)
+                                              .primary,
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -479,8 +477,7 @@ Divider(height: 24, thickness: 1),
                                             ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
+                                            color: Color.fromARGB(255, 124, 177, 255),
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -488,7 +485,8 @@ Divider(height: 24, thickness: 1),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: Color(0xFF998BCF),
+                                            color: FlutterFlowTheme.of(context)
+                                              .primary,
                                             width: 2,
                                           ),
                                           borderRadius:
@@ -560,7 +558,7 @@ Divider(height: 24, thickness: 1),
     });
   },
                                                     activeColor: Colors.white, // 🟢 Thumb color when ON
-  activeTrackColor: Color(0xFF998BCF), // 🟣 Track color when ON (your theme)
+  activeTrackColor: Color.fromARGB(255, 124, 177, 255), // 🟣 Track color when ON (your theme)
   inactiveThumbColor: Colors.white, // ⚪ Thumb color when OFF
   inactiveTrackColor: Color(0xFFD3CCE3),
                                                   ),
@@ -625,9 +623,7 @@ Divider(height: 24, thickness: 1),
                                                       enabledBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .alternate,
+                                                          color:Color.fromARGB(255, 124, 177, 255),
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -637,7 +633,8 @@ Divider(height: 24, thickness: 1),
                                                       focusedBorder:
                                                           OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                          color: Color(0xFF998BCF),
+                                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
                                                           width: 2,
                                                         ),
                                                         borderRadius:
@@ -759,15 +756,15 @@ Divider(height: 24, thickness: 1),
                                         ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
+                                        color: Color.fromARGB(255, 124, 177, 255),
                                         width: 2,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0xFF998BCF),
+                                        color: FlutterFlowTheme.of(context)
+                                              .primary,
                                         width: 2,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
@@ -909,7 +906,7 @@ print('Product ID: ${widget.productData['productId']}');
   options: FFButtonOptions(
     width: double.infinity,
     height: 48,
-    color: Color(0xFF998BCF),
+    color: Color.fromARGB(255, 124, 177, 255),
     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
       fontFamily: 'Outfit',
       color: Colors.white,

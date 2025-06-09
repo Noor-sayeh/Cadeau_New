@@ -49,8 +49,9 @@ class _OwnerAllNotificationsWidgetState extends State<OwnerAllNotificationsWidge
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("📩 Owner Notifications"),
+        title: const Text("📩 Owner Notifications", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black)),
         centerTitle: true,
+        
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -71,7 +72,7 @@ class _OwnerAllNotificationsWidgetState extends State<OwnerAllNotificationsWidge
                       child: ListTile(
                         leading: Icon(
                           isDelivery ? Icons.local_shipping : Icons.campaign,
-                          color: isDelivery ? Colors.green : Colors.deepPurple,
+                          color: isDelivery ? Colors.green : Color.fromARGB(255, 124, 177, 255),
                         ),
                         title: Text(content),
                         subtitle: Text(

@@ -109,7 +109,7 @@ class _AdminNotificationsWidgetState extends State<AdminNotificationsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF6F7FB),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -125,10 +125,14 @@ class _AdminNotificationsWidgetState extends State<AdminNotificationsWidget> {
                           onPressed: () => Navigator.pop(context),
                         ),
                         const SizedBox(width: 4),
-                        const Text(
-                          '📢 Admin Notifications',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF3A3A3A)),
-                        ),
+                       Expanded(
+  child: Text(
+    'Notifications 📢',
+    textAlign: TextAlign.center,
+    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+  ),
+),
+                        
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -138,42 +142,40 @@ class _AdminNotificationsWidgetState extends State<AdminNotificationsWidget> {
                         itemBuilder: (context, index) {
                           final notif = notifications[index];
                           final order = notif['orderDetails'];
-final isOrder = order != null;
-final isDelivered = isOrder && order['status'] == 'delivery';
+                          final isOrder = order != null;
+                          final isDelivered = isOrder && order['status'] == 'delivery';
 
                           final sentAt = notif['sentAt'] ?? '';
-                         
-                    String shortOrderId = '';
-if (order != null && order['_id'] != null && order['_id'].toString().length >= 8) {
-  shortOrderId = order['_id'].toString().substring(0, 8);
-}
 
- // 🟢 newest gets #1
+                          String shortOrderId = '';
+                          if (order != null && order['_id'] != null && order['_id'].toString().length >= 8) {
+                            shortOrderId = order['_id'].toString().substring(0, 8);
+                          }
+
                           final userName = notif['userName'] ?? 'Unknown';
 
                           return InkWell(
                             onTap: () {
-  if (isOrder) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => OrderDetailsPage(
-          order: order,
-          userName: userName,
-        ),
-      ),
-    );
-  }
-},
-
+                              if (isOrder) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => OrderDetailsPage(
+                                      order: order,
+                                      userName: userName,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             child: Card(
                               margin: const EdgeInsets.symmetric(vertical: 10),
-                              elevation: 3,
-                              color: isOrder && !isDelivered ? const Color(0xFFFFF3E0) : Colors.white,
+                              elevation: 2,
+                              color: isOrder && !isDelivered ? const Color(0xFFFFF7EC) : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 side: BorderSide(
-                                  color: isOrder ? (isDelivered ? Colors.grey : Colors.deepOrange) : Colors.blueAccent,
+                                  color: isOrder ? (isDelivered ? Colors.grey : Colors.deepOrangeAccent) : Colors.blueAccent,
                                   width: 1.2,
                                 ),
                               ),
@@ -186,22 +188,21 @@ if (order != null && order['_id'] != null && order['_id'].toString().length >= 8
                                       children: [
                                         Icon(
                                           isOrder ? Icons.local_shipping : Icons.notifications_active,
-                                          color: isOrder ? (isDelivered ? Colors.grey : Colors.deepOrange) : Colors.blueAccent,
+                                          color: isOrder ? (isDelivered ? Colors.grey : Colors.deepOrangeAccent) : Colors.blueAccent,
                                         ),
                                         const SizedBox(width: 8),
-                                       Expanded(
-  child: Text(
-    isOrder
-      ? '#$shortOrderId from $userName - ${isDelivered ? "Delivered" : "Pending"}'
-      : '$userName - ${notif['content']}',
-    style: TextStyle(
-      fontSize: 15,
-      fontWeight: !isDelivered ? FontWeight.bold : FontWeight.normal,
-      color: const Color(0xFF424242),
-    ),
-  ),
-),
-
+                                        Expanded(
+                                          child: Text(
+                                            isOrder
+                                                ? '#$shortOrderId from $userName - ${isDelivered ? "Delivered" : "Pending"}'
+                                                : '$userName - ${notif['content']}',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: !isDelivered ? FontWeight.bold : FontWeight.normal,
+                                              color: const Color(0xFF424242),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),

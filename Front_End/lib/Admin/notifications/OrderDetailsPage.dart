@@ -55,75 +55,79 @@ class OrderDetailsPage extends StatelessWidget {
     final delivery = order['deliveryDetails'];
 
     return Scaffold(
-    appBar: AppBar(
-  backgroundColor: Colors.white,
-  elevation: 1,
-  centerTitle: true,
-  title: const Text(
-    'Order Details',
-    style: TextStyle(
-      color: Colors.black87,
-      fontWeight: FontWeight.w600,
-      fontSize: 18,
-    ),
-  ),
-  iconTheme: IconThemeData(color: Colors.black87),
-),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            sectionTitle("🛒 Products"),
-            for (var product in products) buildProductCard(product),
-            const SizedBox(height: 16),
-
-            if (giftBox != null) ...[
-              sectionTitle("🎁 Gift Box"),
-              buildField("Box", giftBox["box"]),
-              buildField("Box Color", giftBox["boxColor"]),
-              buildField("Lid Color", giftBox["lidColor"]),
-              buildField("Ribbon Color", giftBox["ribbonColor"]),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        centerTitle: true,
+        title: const Text(
+          'Order Details',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black87),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Color(0xFFF7F9FC)],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              sectionTitle("🛒 Products"),
+              for (var product in products) buildProductCard(product),
               const SizedBox(height: 16),
-            ],
-
-            if (giftCard != null) ...[
-              sectionTitle("💌 Gift Card"),
-              buildField("Sender", giftCard["senderName"]),
-              buildField("Recipient", giftCard["recipientName"]),
-              buildField("Message", giftCard["message"]),
-              const SizedBox(height: 16),
-            ],
-
-            if (delivery != null) ...[
-              sectionTitle("🚚 Delivery"),
-              buildField("Address", delivery["address"]),
-              buildField("Payment Method", order["paymentMethod"]),
-              buildField("Total", "\$${order["totalAmount"]}"),
-              buildField("Status", order["status"]),
-              const SizedBox(height: 20),
-
-              if (order["status"] == "pending")
-                Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () => markAsDelivered(context),
-                    icon: const Icon(Icons.check_circle_outline),
-                    label: const Text("Mark as Delivered"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+              if (giftBox != null) ...[
+                sectionTitle("🎁 Gift Box"),
+                buildField("Box", giftBox["box"]),
+                buildField("Box Color", giftBox["boxColor"]),
+                buildField("Lid Color", giftBox["lidColor"]),
+                buildField("Ribbon Color", giftBox["ribbonColor"]),
+                const SizedBox(height: 16),
+              ],
+              if (giftCard != null) ...[
+                sectionTitle("💌 Gift Card"),
+                buildField("Sender", giftCard["senderName"]),
+                buildField("Recipient", giftCard["recipientName"]),
+                buildField("Message", giftCard["message"]),
+                const SizedBox(height: 16),
+              ],
+              if (delivery != null) ...[
+                sectionTitle("🚚 Delivery"),
+                buildField("Address", delivery["address"]),
+                buildField("Payment Method", order["paymentMethod"]),
+                buildField("Total", "\$${order["totalAmount"]}"),
+                buildField("Status", order["status"]),
+                const SizedBox(height: 20),
+                if (order["status"] == "pending")
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () => markAsDelivered(context),
+                      icon: const Icon(Icons.check_circle_outline),
+                      label: const Text("Mark as Delivered"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF4CAF50),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 2,
                       ),
-                      elevation: 3,
                     ),
                   ),
-                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -131,13 +135,13 @@ class OrderDetailsPage extends StatelessWidget {
 
   Widget sectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         title,
         style: const TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF3A3A3A),
+          color: Color(0xFF333333),
         ),
       ),
     );
@@ -147,17 +151,17 @@ class OrderDetailsPage extends StatelessWidget {
     final imageUrl = fixImageUrl(product['imageUrl']);
 
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        contentPadding: const EdgeInsets.all(12),
+        contentPadding: const EdgeInsets.all(14),
         leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
           child: Image.network(
             imageUrl,
-            width: 50,
-            height: 50,
+            width: 55,
+            height: 55,
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
           ),
@@ -181,8 +185,8 @@ class OrderDetailsPage extends StatelessWidget {
             child: Text(
               "$title:",
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF555555),
               ),
             ),
           ),
@@ -192,7 +196,7 @@ class OrderDetailsPage extends StatelessWidget {
               value?.toString() ?? "-",
               style: const TextStyle(
                 fontSize: 15,
-                color: Colors.black87,
+                color: Color(0xFF333333),
               ),
             ),
           ),

@@ -99,7 +99,7 @@ Future<void> fetchJordanHolidays() async {
   );
 
   try {
-    final response = await http.get(url);
+    final response = await http.get(url);//const Color.fromARGB(255, 5, 73, 124),
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final all = data['response']['holidays'];
@@ -143,12 +143,12 @@ void initState() {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Color(0xFF998BCF)),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 0, 0)),
         title: const Text(
           'Admin Notifications',
           style: TextStyle(
             fontFamily: 'Outfit',
-            color: Color(0xFF998BCF),
+            color: Color.fromARGB(255, 0, 0, 0),
             fontWeight: FontWeight.w600,
             fontSize: 20,
           ),
@@ -185,9 +185,22 @@ void initState() {
               DropdownButtonFormField<String>(
                 value: _target,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: Colors.grey.shade400),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: Colors.grey.shade400), // Normal border
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: Color(0xFF7CB1FF), width: 2), // 👈 Your desired blue focus color
+  ),
+  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+),
+
+                
                   dropdownColor: Colors.white, // ✅ خلفية القائمة
   style: const TextStyle(
     fontFamily: 'Outfit',
@@ -222,7 +235,7 @@ DropdownMenuItem(value: 'owners', child: Text('Owners Only')),
 
       return FilterChip(
         selected: isSelected,
-        label: Text(name, style: const TextStyle(fontFamily: 'Outfit')),
+        label: Text(name, style: TextStyle(fontFamily: 'Outfit',color: isSelected ? Colors.white : Colors.black,)),
         onSelected: (selected) {
           setState(() {
             if (selected) {
@@ -232,8 +245,8 @@ DropdownMenuItem(value: 'owners', child: Text('Owners Only')),
             }
           });
         },
-        selectedColor: const Color(0xFF998BCF),
-        checkmarkColor: Colors.white,
+        selectedColor: Color.fromARGB(255, 124, 177, 255),
+        checkmarkColor: const Color.fromARGB(255, 0, 0, 0),
       );
     }).toList(),
   ),
@@ -260,7 +273,7 @@ holidays.isEmpty
 
           return ActionChip(
             label: Text('🎉 $name', style: const TextStyle(fontFamily: 'Outfit')),
-            backgroundColor: const Color(0xFFECEAFF),
+            backgroundColor: const Color.fromARGB(255, 234, 250, 255),
             onPressed: () {
                final formattedDate = DateTime.tryParse(date)?.toLocal().toString().split(' ')[0] ?? date;
 
@@ -292,7 +305,7 @@ Wrap(
   children: (showAllSuggestions ? suggestions : suggestions.take(2)).map((s) {
     return ActionChip(
       label: Text(s, style: const TextStyle(fontFamily: 'Outfit')),
-      backgroundColor: const Color(0xFFECEAFF),
+      backgroundColor: const Color.fromARGB(255, 234, 250, 255),
       onPressed: () {
         _messageController.text = s;
       },
@@ -305,7 +318,7 @@ if (!showAllSuggestions && suggestions.length > 2)
     icon: const Icon(Icons.expand_more),
     label: const Text('Show more suggestions'),
     style: TextButton.styleFrom(
-      foregroundColor: Color(0xFF998BCF),
+      foregroundColor: Color.fromARGB(255, 255, 180, 68),
     ),
   ),
 
@@ -345,7 +358,7 @@ if (!showAllSuggestions && suggestions.length > 2)
                     style: const TextStyle(fontFamily: 'Outfit', fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF998BCF),
+                    backgroundColor: Color.fromARGB(255, 124, 177, 255),
                     foregroundColor: Colors.white,
                     elevation: 2,
                     padding: const EdgeInsets.symmetric(vertical: 16),

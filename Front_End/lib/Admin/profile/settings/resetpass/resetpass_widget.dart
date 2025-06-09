@@ -82,12 +82,24 @@ class _ResetpassWidgetState extends State<ResetpassWidget> {
       focusNode: focusNode,
       obscureText: true,
       decoration: InputDecoration(
-        labelText: label,
-        hintText: '$label...',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-        fillColor: const Color(0xFFF4F4FA),
-      ),
+  labelText: label,
+  hintText: '$label...',
+  filled: true,
+  fillColor: const Color(0xFFF4F4FA),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: const BorderSide(
+      color: Color.fromARGB(255, 124, 177, 255), // ✅ Your desired color
+      width: 2,
+    ),
+  ),
+floatingLabelStyle: TextStyle(
+    color: Colors.grey[700],// 👈 label color when focused
+  ),),
+
       style: const TextStyle(fontSize: 16, color: Colors.black87),
     );
   }
@@ -113,7 +125,8 @@ class _ResetpassWidgetState extends State<ResetpassWidget> {
                   const SizedBox(width: 8),
                   Text(
                     'Reset Password',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                  
                   ),
                 ],
               ),
@@ -161,7 +174,7 @@ class _ResetpassWidgetState extends State<ResetpassWidget> {
                   options: FFButtonOptions(
                     width: 270,
                     height: 50,
-                    color: const Color(0xFF998BCF),
+                    color: const Color.fromARGB(255, 124, 177, 255),
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           fontFamily: 'Outfit',
                           color: Colors.white,

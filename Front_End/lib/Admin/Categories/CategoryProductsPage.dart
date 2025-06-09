@@ -72,13 +72,21 @@ class _AdminCategoryListPageState extends State<AdminCategoryListPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {//style: TextStyle(
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Categories'),
+        title: const Text(
+  'Manage Categories',
+  style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  ),
+),//TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -110,7 +118,7 @@ class _AdminCategoryListPageState extends State<AdminCategoryListPage> {
 );
 
         },
-        backgroundColor: Color(0xFF6F61EF),
+        backgroundColor: Color.fromARGB(255, 124, 177, 255),
         shape: const CircleBorder(),
         child: Icon(Icons.add),
       ),

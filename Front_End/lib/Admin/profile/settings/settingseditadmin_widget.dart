@@ -98,7 +98,7 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
                   SizedBox(width: 8),
                   Text(
                     'Profile Settings',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
                   ),
                 ],
               ),
@@ -129,10 +129,11 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
                   focusNode: _model.textFieldFocusNode1,
                   decoration: InputDecoration(
                     labelText: 'Your Name',
+                    labelStyle: TextStyle(color: Colors.grey[700]),
                     hintText: 'Admin',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF998BCF), width: 2),
+                      borderSide: BorderSide(color: Color.fromARGB(255, 124, 177, 255), width: 2),
                     ),
                   ),
                   validator: _model.textController1Validator.asValidator(context),
@@ -155,7 +156,7 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.lock, color: Color(0xFF998BCF)),
+                      Icon(Icons.lock, color: Color.fromARGB(255, 124, 177, 255)),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -192,7 +193,7 @@ class _SettingseditadminWidgetState extends State<SettingseditadminWidget> {
                   icon: Icon(Icons.save),
                   label: Text('Save Changes'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF998BCF),
+                    backgroundColor: Color.fromARGB(255, 124, 177, 255),
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

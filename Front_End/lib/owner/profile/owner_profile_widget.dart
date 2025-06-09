@@ -266,11 +266,7 @@ Color _getColorFromName(String? name) {
     SizedBox(width: 12),
     Text(
       'Profile',
-      style: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: Colors.black87,
-      ),
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
     ),
   ],
 ),
@@ -301,14 +297,15 @@ SizedBox(height: 12),
           )
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(2),
-        child: Icon(
-          FontAwesomeIcons.userShield,
-          color: FlutterFlowTheme.of(context).primary,
-          size: 40,
-        ),
-      ),
+      child: CircleAvatar(
+  radius: 60,
+  backgroundImage: AssetImage(
+    ownerData?['gender']?.toLowerCase() == 'female'
+        ? 'assets/images/ownergirl.avif'
+        : 'assets/images/ownerboy.avif',
+  ),
+  backgroundColor: Colors.transparent,
+)
     ),
     SizedBox(height: 12),
     Text(
@@ -359,7 +356,7 @@ SizedBox(height: 12),
     decoration: BoxDecoration(
       border: Border(
         bottom: BorderSide(
-          color: Colors.purple, // Your border color
+          color: Color.fromARGB(255, 124, 177, 255), // Your border color
           width: 2,
         ),
       ),
@@ -367,12 +364,12 @@ SizedBox(height: 12),
     child: TabBar(
       isScrollable: true,
       controller: _tabController,
-      labelColor: Colors.purple, // Active tab color
+      labelColor: Color.fromARGB(255, 124, 177, 255), // Active tab color
       unselectedLabelColor: Colors.grey, // Inactive tab color
       indicator: UnderlineTabIndicator(
         borderSide: BorderSide(
           width: 2,
-          color: Colors.purple
+          color: Color.fromARGB(255, 124, 177, 255)
         ),
         insets: EdgeInsets.symmetric(horizontal: 16),
       ),

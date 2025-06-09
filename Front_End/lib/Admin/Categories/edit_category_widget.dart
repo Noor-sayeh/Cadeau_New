@@ -96,7 +96,7 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
                     Text(
                       'Edit Category',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
@@ -113,7 +113,7 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
                     height: 130,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF998BCF), width: 3),
+                      border: Border.all(color: Color.fromARGB(255, 124, 177, 255), width: 3),
                       image: _newImageFile != null
                           ? DecorationImage(image: FileImage(_newImageFile!), fit: BoxFit.cover)
                           : (widget.currentImage != null
@@ -159,6 +159,7 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
                     children: [
                       TextField(
                         controller: _nameController,
+                        cursorColor: Color.fromARGB(255, 124, 177, 255),
                         decoration: InputDecoration(
                           labelText: 'Category Name',
                           labelStyle: TextStyle(color: Colors.grey[700]),
@@ -166,17 +167,17 @@ class _EditCategoryWidgetState extends State<EditCategoryWidget> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF998BCF), width: 2),
+                            borderSide: BorderSide(color: Color.fromARGB(255, 124, 177, 255), width: 2),
                           ),
                         ),
                       ),
                       SizedBox(height: 20),
                       ElevatedButton.icon(
                         onPressed: _submitEdit,
-                        icon: Icon(Icons.save),
-                        label: Text('Save Changes'),
+                        icon: Icon(Icons.save,color: Colors.white),
+                        label: Text('Save Changes', style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF998BCF),
+                          backgroundColor: Color.fromARGB(255, 124, 177, 255),
                           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
