@@ -54,7 +54,7 @@ class _JordanHolidaysWidgetState extends State<JordanHolidaysWidget> {
       backgroundColor: const Color(0xFFF7F8FC),
       appBar: AppBar(
         title: const Text(
-          '🇯🇴 Jordan Holidays 2025',
+          '🇯🇴 Jordan Holidays',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -89,8 +89,8 @@ class _JordanHolidaysWidgetState extends State<JordanHolidaysWidget> {
                       setState(() => selectedYear = value!);
                       await fetchJordanHolidays();
                     },
-                    items: List.generate(10, (index) {
-                      final year = 2023 + index;
+                    items: List.generate(11, (index) {
+                      final year = 2025 + index;
                       return DropdownMenuItem(value: year, child: Text('$year'));
                     }),
                   ),

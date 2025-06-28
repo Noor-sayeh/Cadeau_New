@@ -21,11 +21,11 @@ class _GiftBoxWebViewState extends State<GiftBoxWebView> {
       }
 
       final data = jsonDecode(cleanedResult);
-      print("✅ بيانات المستخدم: $data");
+      print("✅ Data saved:  $data");
 
       // 🔗 أرسل إلى السيرفر
       final response = await http.post(
-        Uri.parse("http://192.168.1.107:5000/api/box/saveBoxChoice"),
+        Uri.parse("http://192.168.1.106:5000/api/box/saveBoxChoice"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "userId": "noor123", // غيّريه لاحقاً بالتوكن الحقيقي
@@ -38,7 +38,7 @@ class _GiftBoxWebViewState extends State<GiftBoxWebView> {
           SnackBar(content: Text("✅ تم الحفظ في MongoDB!")),
         );
       } else {
-        print("❌ خطأ: ${response.body}");
+        print("❌ problem: ${response.body}");
       }
     } catch (e) {
       print("❌ Exception: $e");
@@ -57,15 +57,9 @@ class _GiftBoxWebViewState extends State<GiftBoxWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('عرض صندوق الهدية ثلاثي الأبعاد'),
+        title: Text(' 3D giftbox'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            tooltip: "احفظ اختياراتي",
-            onPressed: () => saveBoxSelection(_controller),
-          )
-        ],
+       
       ),
       body: Column(
         children: [
@@ -80,9 +74,9 @@ class _GiftBoxWebViewState extends State<GiftBoxWebView> {
               child: ElevatedButton.icon(
                 onPressed: () => saveBoxSelection(_controller),
                 icon: Icon(Icons.save),
-                label: Text("احفظ اختياراتي"),
+                label: Text("Save " ,style: const TextStyle(color : Colors.white,)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: Color.fromARGB(255, 124, 177, 255),
                   padding: EdgeInsets.symmetric(vertical: 14),
                   textStyle: TextStyle(fontSize: 18),
                 ),

@@ -57,10 +57,13 @@ imageUrls = List<String>.from(existingImageUrls);
   _model.descriptionTextController ??= TextEditingController(text: widget.productData['description'] ?? '');
   _model.descriptionFocusNode ??= FocusNode();
 
-  _model.minpriceTextController ??= TextEditingController(
-    text: widget.productData['priceRange']?['min']?.toString() ?? ''
+  final priceRange = widget.productData['priceRange'];
+final minPrice = (priceRange is Map && priceRange.containsKey('min'))
+    ? priceRange['min'].toString()
+    : priceRange?.toString() ?? '';
 
-  );
+_model.minpriceTextController ??= TextEditingController(text: minPrice);
+
   _model.minpriceFocusNode ??= FocusNode();
 
   _model.maxpriceTextController ??= TextEditingController(
@@ -888,7 +891,7 @@ print('Product ID: ${widget.productData['productId']}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Product updated successfully')),
         );
-        Navigator.pop(context);
+       
       } else {
         
         ScaffoldMessenger.of(context).showSnackBar(

@@ -331,6 +331,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                           .labelLarge
                                           .override(
                                             fontFamily: 'Outfit',
+                                            
                                             letterSpacing: 0.0,
                                           ),
                                       hintStyle: FlutterFlowTheme.of(context)
@@ -395,6 +396,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -479,6 +481,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -563,6 +566,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -647,6 +651,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -702,6 +707,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryText,
                                             letterSpacing: 0.0,
+                                           
                                           ),
                                       iconColor: FlutterFlowTheme.of(context)
                                           .secondaryText,
@@ -801,6 +807,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -888,6 +895,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     maxLines: 9,
                                     minLines: 5,
@@ -974,6 +982,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
@@ -1059,6 +1068,7 @@ class _OwnerDetailsWidgetState extends State<OwnerDetailsWidget> {
                                         .override(
                                           fontFamily: 'Outfit',
                                           letterSpacing: 0.0,
+                                          color: Colors.black,
                                         ),
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,

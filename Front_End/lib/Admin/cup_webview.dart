@@ -21,10 +21,10 @@ class _CupWebViewState extends State<CupWebView> {
       }
 
       final data = jsonDecode(cleanedResult);
-      print("✅ بيانات الكوب: $data");
+      print("✅ Saved cup details $data");
 
       final response = await http.post(
-        Uri.parse("http://192.168.1.107:5000/api/cups/saveCupChoice"), // تأكدي من المسار
+        Uri.parse("http://192.168.1.106:5000/api/cups/saveCupChoice"), // تأكدي من المسار
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
   "userId": "noor123",
@@ -40,10 +40,10 @@ class _CupWebViewState extends State<CupWebView> {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("✅ تم حفظ تصميم الكوب!")),
+          SnackBar(content: Text("✅ Saved cup details")),
         );
       } else {
-        print("❌ خطأ في الحفظ: ${response.body}");
+        print("❌ Issue ${response.body}");
       }
     } catch (e) {
       print("❌ Exception: $e");
@@ -63,13 +63,7 @@ class _CupWebViewState extends State<CupWebView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Customize your own cup '),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            tooltip: "احفظ اختياراتي",
-            onPressed: () => saveCupSelection(_controller),
-          )
-        ],
+      
       ),
      body: Column(
   children: [
@@ -107,9 +101,9 @@ class _CupWebViewState extends State<CupWebView> {
       child: ElevatedButton.icon(
         onPressed: () => saveCupSelection(_controller),
         icon: Icon(Icons.save),
-        label: Text(" Save "),
+        label: Text(" Save " ,style: const TextStyle(color : Colors.white,)),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Color.fromARGB(255, 124, 177, 255),
           padding: EdgeInsets.symmetric(vertical: 16),
         ),
       ),

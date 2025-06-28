@@ -111,7 +111,7 @@ Future<void> fetchJordanHolidays() async {
         if (date == null) return false;
 
         final diff = date.difference(today).inDays;
-        return diff >= 0 && diff <= 7;
+        return diff >= 0 && diff <= 14;
       }).toList();
 
       setState(() {
@@ -263,7 +263,7 @@ Text(
 ),
 const SizedBox(height: 8),
 holidays.isEmpty
-    ? const Text('No holidays within the next 7 days.')
+    ? const Text('No holidays within the next 14 days.')
     : Wrap(
         spacing: 8,
         runSpacing: 8,
