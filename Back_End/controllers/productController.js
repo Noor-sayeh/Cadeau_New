@@ -30,7 +30,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
     // Get products with filters
     const products = await Product.find(filter)
       .sort({ popularity: -1 })
-      .limit(Number(limit));
+      
 
     res.json({
       success: true,
